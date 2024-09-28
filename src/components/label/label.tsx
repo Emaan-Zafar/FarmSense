@@ -31,7 +31,7 @@ export const Label = forwardRef<HTMLSpanElement, LabelProps>(
       <StyledLabel
         ref={ref}
         component="span"
-        className={labelClasses.root.concat(className ? ` ${className}` : '')}
+        className={labelClasses.root}
         ownerState={{ color, variant }}
         sx={{ ...(startIcon && { pl: 0.75 }), ...(endIcon && { pr: 0.75 }), ...sx }}
         theme={theme}

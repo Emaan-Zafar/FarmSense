@@ -25,6 +25,7 @@ export function Chart({
       dir="ltr"
       className={chartClasses.root.concat(className ? ` ${className}` : '')}
       sx={{
+        backgroundColor: 'transparent',
         width,
         height,
         flexShrink: 0,

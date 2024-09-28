@@ -13,7 +13,7 @@ export const SvgColor = forwardRef<HTMLSpanElement, SvgColorProps>(
     <Box
       ref={ref}
       component="span"
-      className={svgColorClasses.root.concat(className ? ` ${className}` : '')}
+      className={svgColorClasses.root}
       sx={{
         width,
         flexShrink: 0,

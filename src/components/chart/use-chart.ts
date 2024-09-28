@@ -65,6 +65,7 @@ export function useChart(options?: ChartOptions): ChartOptions {
       parentHeightOffset: 0,
       fontFamily: theme.typography.fontFamily,
       foreColor: theme.vars.palette.text.disabled,
+      background: 'transparent',
       ...options?.chart,
       animations: {
         enabled: true,

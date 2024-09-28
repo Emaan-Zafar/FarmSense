@@ -9,6 +9,10 @@ import {
   _postTitles,
   _description,
   _productNames,
+  _breed,
+  _sex,
+  _age,
+  _status,
 } from './_mock';
 
 // ----------------------------------------------------------------------
@@ -21,26 +25,22 @@ export const _myAccount = {
 
 // ----------------------------------------------------------------------
 
+
+// Avatar images cycling logic
+const getAvatar = (index: number) => {
+  const avatarIndex = (index % 4) + 1;
+  const avatarExtension = avatarIndex === 2 ? 'webp' : 'jpg'; // 'avatar-2' is a .webp, others are .jpg
+  return `/assets/images/avatar/avatar-${avatarIndex}.${avatarExtension}`;
+};
+
+
 export const _users = [...Array(24)].map((_, index) => ({
-  id: _id(index),
-  name: _fullName(index),
-  company: _company(index),
-  isVerified: _boolean(index),
-  avatarUrl: `/assets/images/avatar/avatar-${index + 1}.webp`,
-  status: index % 4 ? 'active' : 'banned',
-  role:
-    [
-      'Leader',
-      'Hr Manager',
-      'UI Designer',
-      'UX Designer',
-      'UI/UX Designer',
-      'Project Manager',
-      'Backend Developer',
-      'Full Stack Designer',
-      'Front End Developer',
-      'Full Stack Developer',
-    ][index] || 'UI Designer',
+  id: _id(index), // Mapping 'sku' as 'ID'
+  breed: _breed(index), // Mapping 'breed'
+  sex: _sex(index), // Mapping 'sex'
+  age: _age(index), // Mapping 'age_in_year' as 'Age'
+  avatarUrl: getAvatar(index), // Cycle through avatars
+  status: _status(index), // Example status based on weight
 }));
 
 // ----------------------------------------------------------------------

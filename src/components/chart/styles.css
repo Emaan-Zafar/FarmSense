@@ -1,19 +1,20 @@
 .apexcharts-canvas {
+
   /**
   * Tooltip
   */
   .apexcharts-tooltip {
-    min-width: 80px;
-    border-radius: 10px;
-    backdrop-filter: blur(6px);
+    min-width: '80px';
+    border-radius: '10px';
+    backdrop-filter: 'blur(6px)';
     color: var(--palette-text-primary);
     box-shadow: var(--customShadows-dropdown);
     background-color: rgba(var(--palette-background-defaultChannel) / 0.9);
   }
   .apexcharts-xaxistooltip {
-    border-radius: 10px;
+    border-radius: '10px';
     border-color: transparent;
-    backdrop-filter: blur(6px);
+    backdrop-filter: 'blur(6px)';
     color: var(--palette-text-primary);
     box-shadow: var(--customShadows-dropdown);
     background-color: rgba(var(--palette-background-defaultChannel) / 0.9);
@@ -34,10 +35,10 @@
   * Tooltip: group
   */
   .apexcharts-tooltip-series-group {
-    padding: 4px 12px;
+    padding: '4px 12px';
   }
   .apexcharts-tooltip-marker {
-    margin-right: 8px;
+    margin-right: '8px';
   }
   /**
   * Legend
@@ -46,11 +47,11 @@
     padding: 0;
   }
   .apexcharts-legend-marker {
-    margin-right: 6px;
+    margin-right: '6px';
   }
   .apexcharts-legend-text {
     margin-left: 0;
     padding-left: 0;
-    line-height: 18px;
+    line-height: '18px';
   }
 }

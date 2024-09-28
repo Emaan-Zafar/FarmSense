@@ -15,7 +15,7 @@ export const Iconify = forwardRef<SVGElement, IconifyProps>(
       ssr
       ref={ref}
       component={Icon}
-      className={iconifyClasses.root.concat(className ? ` ${className}` : '')}
+      className={iconifyClasses.root}
       sx={{
         width,
         height: width,

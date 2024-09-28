@@ -11,12 +11,16 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));
-export const BlogPage = lazy(() => import('src/pages/blog'));
-export const UserPage = lazy(() => import('src/pages/user'));
+export const BlogPage = lazy(() => import('src/pages/behaviour_analysis'));
+export const UserPage = lazy(() => import('src/pages/catalog'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
-export const ProductsPage = lazy(() => import('src/pages/products'));
+export const SignUpPage = lazy(() => import('src/pages/sign-up'));
+export const ForgotPassword = lazy(() => import('src/pages/forgot-password'));
+export const ProductsPage = lazy(() => import('src/pages/disease_detection'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
-
+export const AddCow = lazy(() => import('src/pages/add-cow'));
+export const EditCow = lazy(() => import('src/pages/edit-cow'));
+export const CowDetails = lazy(() => import('src/pages/cow-details'));
 // ----------------------------------------------------------------------
 
 const renderFallback = (
@@ -35,6 +39,12 @@ const renderFallback = (
 export function Router() {
   return useRoutes([
     {
+      // Default route should redirect to /sign-in
+      element: <Navigate to="/sign-in" replace />,
+      index: true,
+    },
+    {
+      path: 'dashboard',
       element: (
         <DashboardLayout>
           <Suspense fallback={renderFallback}>
@@ -44,9 +54,9 @@ export function Router() {
       ),
       children: [
         { element: <HomePage />, index: true },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { path: 'catalog', element: <UserPage /> },
+        { path: 'disease_detection', element: <ProductsPage /> },
+        { path: 'behaviour_analysis', element: <BlogPage /> },
       ],
     },
     {
@@ -55,6 +65,40 @@ export function Router() {
         <AuthLayout>
           <SignInPage />
         </AuthLayout>
+      ),
+    },
+    {
+      path: 'sign-up',
+      element: (
+        <AuthLayout>
+          <SignUpPage />
+        </AuthLayout>
+      ),
+    },
+    {
+      path: 'forgot-password',
+      element: (
+        <AuthLayout>
+          <ForgotPassword />
+        </AuthLayout>
+      ),
+    },
+    {
+      path: 'add-cow',
+      element: (
+          <AddCow />
+      ),
+    },
+    {
+      path: 'edit-cow',
+      element: (
+          <EditCow />
+      ),
+    },
+    {
+      path: 'cow-details/:id',
+      element: (
+          <CowDetails />
       ),
     },
     {

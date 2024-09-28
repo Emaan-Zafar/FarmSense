@@ -10,16 +10,15 @@ import { _langs, _notifications } from 'src/_mock';
 
 import { Iconify } from 'src/components/iconify';
 
+import { NavMobile, NavDesktop } from 'src/components/navbar/nav';
+import { navData } from 'src/components/navbar/config-nav-dashboard';
 import { Main } from './main';
 import { layoutClasses } from '../classes';
-import { NavMobile, NavDesktop } from './nav';
-import { navData } from '../config-nav-dashboard';
 import { Searchbar } from '../components/searchbar';
 import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
-// import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
 
 // ----------------------------------------------------------------------
@@ -109,7 +108,17 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
        * Sidebar
        *************************************** */
       sidebarSection={
-        <NavDesktop data={navData} layoutQuery={layoutQuery} />
+        <NavDesktop 
+        data={navData} 
+        layoutQuery={layoutQuery} 
+        sx={{ 
+          backgroundColor: 'rgba(255, 255, 255, 0.3)', // Add your background color here
+          color: theme.palette.success.contrastText, // Text color for better contrast
+          height: '100vh', // Ensure the sidebar spans the full height
+          padding: theme.spacing(2), // Optional: Add some padding
+          backdropFilter: 'blur(10px)'
+        }} 
+      />
       }
       /** **************************************
        * Footer
@@ -131,6 +140,10 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
           },
         },
         ...sx,
+        backgroundImage: `url('/assets/background/overlay7.jpg')`, // Add the path to your background image here
+        backgroundSize: 'cover', // Ensure the image covers the entire dashboard
+        backgroundPosition: 'center', // Center the background image
+        backgroundRepeat: 'no-repeat', // Avoid repetition of the image
       }}
     >
       <Main>{children}</Main>
