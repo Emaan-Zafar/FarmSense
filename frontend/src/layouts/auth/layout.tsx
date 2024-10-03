@@ -49,7 +49,7 @@ export function AuthLayout({ sx, children, header }: AuthLayoutProps) {
                 This is an info Alert.
               </Alert>
             ),
-            leftArea: <Logo />,
+            leftArea: <Logo sx={{ width: 120, height: 50 }}/>,
             rightArea: (
               <Link
                 component={RouterLink}

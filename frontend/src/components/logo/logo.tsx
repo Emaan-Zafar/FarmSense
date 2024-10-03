@@ -35,7 +35,7 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
       <Box
         alt="Single logo"
         component="img"
-         src="/assests/images/logo/logo.jpeg"
+         src="/assets/images/logo/k.png"
         width="100%"
         height="100%"
       />
@@ -45,7 +45,7 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
       <Box
         alt="Full logo"
         component="img"
-         src="/assests/images//logo/logo.jpeg"
+         src="/assets/images/logo/k.png"
         width="100%"
         height="100%"
       />
