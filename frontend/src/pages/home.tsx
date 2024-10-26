@@ -29,6 +29,7 @@ interface CattleRecord {
 export default function Page() {
   const [chartData, setChartData] = useState<{ label: string; value: number }[]>([]);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,56 +84,56 @@ export default function Page() {
         <Grid container spacing={3}>
           <Grid xs={12} sm={6} md={3}>
             <AnalyticsWidgetSummary
-              title="Weekly sales"
-              percent={2.6}
-              total={714000}
-              icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />}
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                series: [22, 8, 35, 50, 82, 84, 77, 12],
-              }}
+              title="Total Cows"
+              // percent={2.6}
+              total={4}
+              // icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />}
+              // chart={{
+              //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              //   series: [22, 8, 35, 50, 82, 84, 77, 12],
+              // }}
             />
           </Grid>
 
           <Grid xs={12} sm={6} md={3}>
             <AnalyticsWidgetSummary
-              title="New users"
-              percent={-0.1}
-              total={1352831}
+              title="Milking Cows"
+              // percent={-0.1}
+              total={4}
               color="secondary"
-              icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />}
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                series: [56, 47, 40, 62, 73, 30, 23, 54],
-              }}
+              // icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />}
+              // chart={{
+              //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              //   series: [56, 47, 40, 62, 73, 30, 23, 54],
+              // }}
             />
           </Grid>
 
           <Grid xs={12} sm={6} md={3}>
             <AnalyticsWidgetSummary
-              title="Purchase orders"
-              percent={2.8}
-              total={1723315}
+              title="Healthy Cows"
+              // percent={2.8}
+              total={4}
               color="warning"
-              icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />}
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                series: [40, 70, 50, 28, 70, 75, 7, 64],
-              }}
+              // icon={<img alt="icon" src="/assets/icons/glass/ic-glass-buy.svg" />}
+              // chart={{
+              //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              //   series: [40, 70, 50, 28, 70, 75, 7, 64],
+              // }}
             />
           </Grid>
 
           <Grid xs={12} sm={6} md={3}>
             <AnalyticsWidgetSummary
-              title="Messages"
-              percent={3.6}
-              total={234}
+              title="Unhealthy Cows"
+              // percent={3.6}
+              total={0}
               color="error"
-              icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                series: [56, 30, 23, 54, 47, 40, 62, 73],
-              }}
+              // icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}
+              // chart={{
+              //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+              //   series: [56, 30, 23, 54, 47, 40, 62, 73],
+              // }}
             />
           </Grid>
           
@@ -146,20 +147,22 @@ export default function Page() {
           </Grid>
           
           <Grid xs={12} md={6} lg={8}>
-            <AnalyticsWebsiteVisits
-              title="Website visits"
-              subheader="(+43%) than last year"
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                series: [
-                  { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
-                  { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
-                ],
-              }}
-            />
-          </Grid>
+          <AnalyticsWebsiteVisits
+            title="Average Milk Production"
+            chart={{
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+              series: [
+                { name: 'Cow 1', data: [50, 55, 60, 65, 70, 75, 80, 85, 90] }, // Average production for Cow 1
+                { name: 'Cow 2', data: [45, 50, 55, 60, 65, 70, 75, 80, 85] }, // Average production for Cow 2
+                { name: 'Cow 3', data: [40, 45, 50, 55, 60, 65, 70, 75, 80] }, // Average production for Cow 3
+                { name: 'Cow 4', data: [55, 60, 65, 70, 75, 80, 85, 90, 95] }, // Average production for Cow 4
+              ],
+            }}
+          />
+        </Grid>
 
-          <Grid xs={12} md={6} lg={8}>
+
+          {/* <Grid xs={12} md={6} lg={8}>
             <AnalyticsConversionRates
               title="Conversion rates"
               subheader="(+43%) than last year"
@@ -171,9 +174,9 @@ export default function Page() {
                 ],
               }}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid xs={12} md={6} lg={4}>
+          {/* <Grid xs={12} md={6} lg={4}>
             <AnalyticsCurrentSubject
               title="Current subject"
               chart={{
@@ -185,17 +188,17 @@ export default function Page() {
                 ],
               }}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid xs={12} md={6} lg={8}>
+          {/* <Grid xs={12} md={6} lg={8}>
             <AnalyticsNews title="News" list={_posts.slice(0, 5)} />
           </Grid>
 
           <Grid xs={12} md={6} lg={4}>
             <AnalyticsOrderTimeline title="Order timeline" list={_timeline} />
-          </Grid>
+          </Grid> */}
 
-          <Grid xs={12} md={6} lg={4}>
+          {/* <Grid xs={12} md={6} lg={4}>
             <AnalyticsTrafficBySite
               title="Traffic by site"
               list={[
@@ -205,11 +208,11 @@ export default function Page() {
                 { value: 'twitter', label: 'Twitter', total: 443232 },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid xs={12} md={6} lg={8}>
+          {/* <Grid xs={12} md={6} lg={8}>
             <AnalyticsTasks title="Tasks" list={_tasks} />
-          </Grid>
+          </Grid> */}
         </Grid>
       </DashboardContent>
     </>

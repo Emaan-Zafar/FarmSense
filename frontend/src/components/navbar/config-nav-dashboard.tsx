@@ -19,18 +19,8 @@ export const navData = [
     icon: icon('ic-catalog'),
   },
   {
-    title: 'Disease Detection',
-    path: '/dashboard/disease_detection',
-    icon: icon('ic-disease'),
-  },
-  {
     title: 'Behaviour Analysis',
     path: '/dashboard/behaviour_analysis',
     icon: icon('ic-behaviour'),
-  },
-  {
-    title: 'Sign in',
-    path: '/sign-in',
-    icon: icon('ic-lock'),
-  },
+  }
 ];

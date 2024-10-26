@@ -56,7 +56,7 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
   return (
     <Card {...other}
     sx={{
-      backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent background
+      backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent background
       backdropFilter: 'blur(10px)', // Apply blur effect
       boxShadow: theme.shadows[3], // Retain shadow
       borderRadius: '16px', // Optional: rounded corners

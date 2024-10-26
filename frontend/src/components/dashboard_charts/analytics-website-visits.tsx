@@ -21,9 +21,16 @@ type Props = CardProps & {
     }[];
     options?: ChartOptions;
   };
+  tooltipLabel?: string; // Corrected: define as optional string
 };
 
-export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Props) {
+export function AnalyticsWebsiteVisits({
+  title,
+  subheader,
+  chart,
+  tooltipLabel, // Default value for tooltipLabel
+  ...other
+}: Props) {
   const theme = useTheme();
 
   const chartColors = chart.colors ?? [
@@ -45,20 +52,21 @@ export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Pr
     },
     tooltip: {
       y: {
-        formatter: (value: number) => `${value} visits`,
+        formatter: (value: number) => `${value} ${tooltipLabel}`, // Using tooltipLabel here
       },
     },
     ...chart.options,
   });
 
   return (
-    <Card {...other}
-    sx={{
-      backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent background
-      backdropFilter: 'blur(10px)', // Apply blur effect
-      boxShadow: theme.shadows[3], // Retain shadow
-      borderRadius: '16px', // Optional: rounded corners
-    }}
+    <Card
+      {...other}
+      sx={{
+        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent background
+        backdropFilter: 'blur(10px)', // Apply blur effect
+        boxShadow: theme.shadows[3], // Retain shadow
+        borderRadius: '16px', // Optional: rounded corners
+      }}
     >
       <CardHeader title={title} subheader={subheader} />
 

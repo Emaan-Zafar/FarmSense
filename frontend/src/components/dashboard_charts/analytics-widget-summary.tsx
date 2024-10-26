@@ -19,22 +19,22 @@ import { Chart, useChart } from 'src/components/chart';
 type Props = CardProps & {
   title: string;
   total: number;
-  percent: number;
+  // percent: number;
   color?: ColorType;
-  icon: React.ReactNode;
-  chart: {
-    series: number[];
-    categories: string[];
-    options?: ChartOptions;
-  };
+  // icon: React.ReactNode;
+  // chart: {
+  //   series: number[];
+  //   categories: string[];
+  //   options?: ChartOptions;
+  // };
 };
 
 export function AnalyticsWidgetSummary({
-  icon,
+  // icon,
   title,
   total,
-  chart,
-  percent,
+  // chart,
+  // percent,
   color = 'primary',
   sx,
   ...other
@@ -43,23 +43,23 @@ export function AnalyticsWidgetSummary({
 
   const chartColors = [theme.palette[color].dark];
 
-  const chartOptions = useChart({
-    chart: { sparkline: { enabled: true } },
-    colors: chartColors,
-    xaxis: { categories: chart.categories },
-    grid: {
-      padding: {
-        top: 6,
-        left: 6,
-        right: 6,
-        bottom: 6,
-      },
-    },
-    tooltip: {
-      y: { formatter: (value: number) => fNumber(value), title: { formatter: () => '' } },
-    },
-    ...chart.options,
-  });
+  // const chartOptions = useChart({
+  //   chart: { sparkline: { enabled: true } },
+  //   colors: chartColors,
+  //   xaxis: { categories: chart.categories },
+  //   grid: {
+  //     padding: {
+  //       top: 6,
+  //       left: 6,
+  //       right: 6,
+  //       bottom: 6,
+  //     },
+  //   },
+  //   tooltip: {
+  //     y: { formatter: (value: number) => fNumber(value), title: { formatter: () => '' } },
+  //   },
+  //   ...chart.options,
+  // });
 
   const renderTrending = (
     <Box
@@ -72,11 +72,11 @@ export function AnalyticsWidgetSummary({
         alignItems: 'center',
       }}
     >
-      <Iconify width={20} icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'} />
+      {/* <Iconify width={20} icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'} />
       <Box component="span" sx={{ typography: 'subtitle2' }}>
         {percent > 0 && '+'}
         {fPercent(percent)}
-      </Box>
+      </Box> */}
     </Box>
   );
 
@@ -95,31 +95,47 @@ export function AnalyticsWidgetSummary({
       }}
       {...other}
     >
-      <Box sx={{ width: 48, height: 48, mb: 3 }}>{icon}</Box>
+      {/* <Box sx={{ width: 48, height: 48, mb: 3 }}>{icon}</Box> */}
 
       {renderTrending}
 
+      {/* UPDATED CODE */}
       <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',        // Vertically centers the items
+          justifyContent: 'flex-start', // Aligns title and total close together
+          gap: 1,                      // Adds a small gap between title and total
+          width: '100%',               // Ensure it takes full width
+        }}
+      >
+        <Box sx={{ typography: 'subtitle2' , fontSize:'1.3rem', ml:4}}>{title}</Box>  {/* Title on the left */}
+        <Box sx={{ typography: 'h5'}}>{fShortenNumber(total)}</Box>  {/* Total next to title with small margin */}
+      </Box>
+      
+
+        {/* ORIGINAL CODE */}
+      {/* <Box
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'flex-end',
           justifyContent: 'flex-end',
         }}
-      >
-        <Box sx={{ flexGrow: 1, minWidth: 112 }}>
-          <Box sx={{ mb: 1, typography: 'subtitle2' }}>{title}</Box>
-          <Box sx={{ typography: 'h4' }}>{fShortenNumber(total)}</Box>
-        </Box>
+      > */}
+        {/* <Box sx={{ flexGrow: 1, minWidth: 112 }}> */}
+          {/* Original One */}
+        {/* <Box sx={{ mb: 1, typography: 'subtitle2' }}>{title}</Box> */} 
+        {/* <Box sx={{ typography: 'h4' }}>{fShortenNumber(total)}</Box> */}
 
-        <Chart
-          type="line"
-          series={[{ data: chart.series }]}
-          options={chartOptions}
-          width={84}
-          height={56}
-        />
-      </Box>
+        {/* <Chart
+        //   type="line"
+        //   series={[{ data: chart.series }]}
+        //   options={chartOptions}
+        //   width={84}
+        //   height={56}
+        // /> */}
+      {/* </Box> */}
 
       <SvgColor
         src="/assets/background/shape-square.svg"

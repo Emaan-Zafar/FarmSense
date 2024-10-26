@@ -7,7 +7,7 @@ import { useRouter } from 'src/routes/hooks';
 import axios from 'axios';
 
 export default function EditCow() {
-  const router = useRouter();
+  // const router = useRouter();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { cowData } = state || {}; // Get cowData from state

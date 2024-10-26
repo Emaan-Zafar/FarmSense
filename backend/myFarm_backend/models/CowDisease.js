@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 // Create the schema
 const CowDiseaseSchema = new mongoose.Schema({
   cow: {
-    type: Number,
+    type: String,
     required: true,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
   },
   hour: {
@@ -28,7 +28,7 @@ const CowDiseaseSchema = new mongoose.Schema({
   },
   ACTIVITY_LEVEL: {
     type: Number,
-    default: 0,
+    default: 0.0,
   },
   oestrus: {
     type: Number,
