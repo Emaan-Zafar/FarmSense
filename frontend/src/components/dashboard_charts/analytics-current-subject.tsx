@@ -28,7 +28,7 @@ export function AnalyticsCurrentSubject({ title, subheader, chart, ...other }: P
   const theme = useTheme();
 
   const chartColors = chart.colors ?? [
-    theme.palette.primary.main,
+    theme.palette.secondary.main,
     theme.palette.warning.main,
     theme.palette.info.main,
   ];
@@ -36,10 +36,10 @@ export function AnalyticsCurrentSubject({ title, subheader, chart, ...other }: P
   const chartOptions = useChart({
     colors: chartColors,
     stroke: { width: 2 },
-    fill: { opacity: 0.48 },
+    fill: { opacity: 0.80 },
     xaxis: {
       categories: chart.categories,
-      labels: { style: { colors: [...Array(6)].map(() => theme.palette.text.secondary) } },
+      labels: { style: { colors:'#FFFFF' } },
     },
     ...chart.options,
   });
@@ -47,9 +47,8 @@ export function AnalyticsCurrentSubject({ title, subheader, chart, ...other }: P
   return (
     <Card {...other}
     sx={{
-      backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent background
-      backdropFilter: 'blur(10px)', // Apply blur effect
-      boxShadow: theme.shadows[3], // Retain shadow
+      backgroundColor: '#233a4a', // Semi-transparent background
+      boxShadow: theme.shadows[10], // Retain shadow
       borderRadius: '16px', // Optional: rounded corners
     }}
     >

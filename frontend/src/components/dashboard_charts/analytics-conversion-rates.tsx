@@ -30,14 +30,16 @@ export function AnalyticsConversionRates({ title, subheader, chart, ...other }: 
   const theme = useTheme();
 
   const chartColors = chart.colors ?? [
-    theme.palette.primary.dark,
-    hexAlpha(theme.palette.primary.dark, 0.24),
+    theme.palette.secondary.dark,
+    theme.palette.warning.main,
   ];
 
   const chartOptions = useChart({
     colors: chartColors,
+    fill: { colors: chartColors },
     stroke: { width: 2, colors: ['transparent'] },
     tooltip: {
+      theme: 'dark', // Set tooltip background to dark
       shared: true,
       intersect: false,
       y: {
@@ -45,11 +47,14 @@ export function AnalyticsConversionRates({ title, subheader, chart, ...other }: 
         title: { formatter: (seriesName: string) => `${seriesName}: ` },
       },
     },
-    xaxis: { categories: chart.categories },
+    xaxis: { categories: chart.categories, labels: { style: { colors: '#FFFFFF' } }},
+    yaxis: {
+      labels: { style: { colors: ['#FFFFFF'] } }, // White y-axis label color
+    },
     dataLabels: {
       enabled: true,
       offsetX: -6,
-      style: { fontSize: '10px', colors: ['#FFFFFF', theme.palette.text.primary] },
+      style: { fontSize: '10px', colors: ['#FFFFFF'] },
     },
     plotOptions: {
       bar: {
@@ -65,13 +70,23 @@ export function AnalyticsConversionRates({ title, subheader, chart, ...other }: 
   return (
     <Card {...other}
     sx={{
-      backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent background
-      backdropFilter: 'blur(10px)', // Apply blur effect
-      boxShadow: theme.shadows[3], // Retain shadow
+      backgroundColor: '#233a4a', // Semi-transparent background
+      boxShadow: theme.shadows[10], // Retain shadow
       borderRadius: '16px', // Optional: rounded corners
     }}
     >
-      <CardHeader title={title} subheader={subheader} />
+      <CardHeader 
+  title={title}
+  subheader={subheader}
+  sx={{
+    "& .MuiCardHeader-title": {
+      color: "#FFFFFF", // Set title color to white
+    },
+    "& .MuiCardHeader-subheader": {
+      color: "#FFFFFF", // Set subheader color to white
+    },
+  }}
+/>
 
       <Chart
         type="bar"

@@ -112,11 +112,14 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
         data={navData} 
         layoutQuery={layoutQuery} 
         sx={{ 
-          backgroundColor: 'rgba(255, 255, 255, 0.3)', // Add your background color here
+          background: '#122333',
+          backdropFilter: 'blur(8px)', // Apply blur effect
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Add shadow // Gradient from green to blue, oriented vertically// Add your background color here
           color: theme.palette.success.contrastText, // Text color for better contrast
-          height: '100vh', // Ensure the sidebar spans the full height
-          padding: theme.spacing(2), // Optional: Add some padding
-          backdropFilter: 'blur(10px)'
+          height: '248vh', // Make the sidebar sticky
+          top: 0, // Position it at the top of the viewport // Set height to full viewport height
+          overflowY: 'auto', // Enable vertical scrolling if content exceeds viewport height
+          padding: theme.spacing(2), // Optional: Add some padding // Ensure the sidebar spans the full height
         }} 
       />
       }
@@ -140,10 +143,12 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
           },
         },
         ...sx,
-        backgroundImage: `url('/assets/background/overlay7.jpg')`, // Add the path to your background image here
-        backgroundSize: 'cover', // Ensure the image covers the entire dashboard
-        backgroundPosition: 'center', // Center the background image
-        backgroundRepeat: 'no-repeat', // Avoid repetition of the image
+        background: '#122333', // Gradient from green to blue
+        color: '#FFFFFF', // Set font color to white for readability
+        backdropFilter: 'blur(5px)', // Optional: Add blur for depth
+        '& *': {
+        color: '#FFFFFF', // Ensure all text is white
+        },
       }}
     >
       <Main>{children}</Main>

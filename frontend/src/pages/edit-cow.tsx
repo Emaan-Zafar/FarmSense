@@ -73,7 +73,7 @@ export default function EditCow() {
 
       <Card
         sx={{
-          backgroundColor: 'rgba(255, 255, 255, 0.3)',
+          backgroundColor: '#7b8687',
           backdropFilter: 'blur(8px)',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
           borderRadius: '16px',
@@ -183,7 +183,7 @@ export default function EditCow() {
               <Button
                 variant="outlined"
                 onClick={handleCancel}
-                color="secondary" // Cancel button with secondary color
+                sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} // Change button color // Cancel button with secondary color
               >
                 Cancel
               </Button>

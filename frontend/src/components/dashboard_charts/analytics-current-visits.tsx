@@ -31,7 +31,7 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
   const chartSeries = chart.series.map((item) => item.value);
 
   const chartColors = chart.colors ?? [
-    theme.palette.primary.main,
+    theme.palette.primary.lighter,
     theme.palette.warning.main,
     theme.palette.secondary.dark,
     theme.palette.error.main,
@@ -44,6 +44,7 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
     stroke: { width: 0 },
     dataLabels: { enabled: true, dropShadow: { enabled: false } },
     tooltip: {
+      theme: 'dark',
       y: {
         formatter: (value: number) => fNumber(value),
         title: { formatter: (seriesName: string) => `${seriesName}` },
@@ -56,9 +57,8 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
   return (
     <Card {...other}
     sx={{
-      backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent background
-      backdropFilter: 'blur(10px)', // Apply blur effect
-      boxShadow: theme.shadows[3], // Retain shadow
+      backgroundColor: '#233a4a', // Semi-transparent background
+      boxShadow: theme.shadows[10], // Retain shadow
       borderRadius: '16px', // Optional: rounded corners
     }}
     >

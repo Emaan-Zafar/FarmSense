@@ -94,7 +94,7 @@ export default function Page() {
           variant="contained"
           color="primary"
           onClick={handlePredict}
-          sx={{ mr: 2 }}
+          sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} // Change button color
           disabled={loading} // Disable the button while loading
         >
           {loading ? <CircularProgress size={24} color="inherit" /> : 'Predict'}

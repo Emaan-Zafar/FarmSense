@@ -15,6 +15,7 @@ import { AnalyticsWidgetSummary } from 'src/components/dashboard_charts/analytic
 import { AnalyticsTrafficBySite } from 'src/scripts/analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from 'src/components/dashboard_charts/analytics-current-subject';
 import { AnalyticsConversionRates } from 'src/components/dashboard_charts/analytics-conversion-rates';
+import { AnalyticsWebsiteVisitsLineChart } from 'src/components/dashboard_charts/linechart';
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -162,55 +163,53 @@ export default function Page() {
         </Grid>
 
 
-          {/* <Grid xs={12} md={6} lg={8}>
-            <AnalyticsConversionRates
-              title="Conversion rates"
-              subheader="(+43%) than last year"
-              chart={{
-                categories: ['Italy', 'Japan', 'China', 'Canada', 'France'],
-                series: [
-                  { name: '2022', data: [44, 55, 41, 64, 22] },
-                  { name: '2023', data: [53, 32, 33, 52, 13] },
-                ],
-              }}
-            />
-          </Grid> */}
+        <Grid xs={12} md={6} lg={8}>
+  <AnalyticsConversionRates
+    title="Cow Health Metrics"
+    subheader="Body Temperature and Respiratory Rate"
+    chart={{
+      categories: ['Cow 1', 'Cow 2', 'Cow 3', 'Cow 4', 'Cow 5'], // Update with actual cow identifiers or names
+      series: [
+        { name: 'Body Temperature (°F)', data: [101.5, 102.3, 100.8, 101.0, 102.0] }, // Example body temperature data
+        { name: 'Respiratory Rate (breaths/min)', data: [20, 25, 22, 18, 23] }, // Example respiratory rate data
+      ],
+    }}
+  />
+</Grid>
 
-          {/* <Grid xs={12} md={6} lg={4}>
-            <AnalyticsCurrentSubject
-              title="Current subject"
-              chart={{
-                categories: ['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math'],
-                series: [
-                  { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                  { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                  { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-                ],
-              }}
-            />
-          </Grid> */}
-
-          {/* <Grid xs={12} md={6} lg={8}>
-            <AnalyticsNews title="News" list={_posts.slice(0, 5)} />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={4}>
-            <AnalyticsOrderTimeline title="Order timeline" list={_timeline} />
-          </Grid> */}
-
-          {/* <Grid xs={12} md={6} lg={4}>
-            <AnalyticsTrafficBySite
-              title="Traffic by site"
-              list={[
-                { value: 'facebook', label: 'Facebook', total: 323234 },
-                { value: 'google', label: 'Google', total: 341212 },
-                { value: 'linkedin', label: 'Linkedin', total: 411213 },
-                { value: 'twitter', label: 'Twitter', total: 443232 },
-              ]}
-            />
-          </Grid> */}
-
-          {/* <Grid xs={12} md={6} lg={8}>
+<Grid xs={12} md={6} lg={4}>
+  <AnalyticsCurrentSubject
+    title="Daily Cow Activity Breakdown"
+    chart={{
+      categories: [
+        'Eating',
+        'Sleeping',
+        'Ruminating',
+      ],
+      series: [
+        { name: 'Cow A', data: [180, 320, 120] },  // Values in minutes
+        { name: 'Cow B', data: [110, 260, 200] },
+        { name: 'Cow C', data: [90, 350, 160] },
+      ],
+    }}
+  />
+  <Grid xs={12} md={6} lg={8} sx={{ mt: 4 }}>
+        <AnalyticsWebsiteVisitsLineChart
+          title="Average Ruminating Time per Cow"
+          subheader="Duration in minutes over the week"
+          chart={{
+            categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+            series: [
+              { name: 'Cow A', data: [180, 200, 220, 190, 210, 230, 250] },
+              { name: 'Cow B', data: [160, 170, 180, 175, 185, 195, 205] },
+              { name: 'Cow C', data: [200, 210, 220, 240, 230, 250, 260] },
+            ],
+          }}
+          tooltipLabel="minutes"
+        />
+      </Grid>
+</Grid>
+{/* <Grid xs={12} md={4} lg={8}>
             <AnalyticsTasks title="Tasks" list={_tasks} />
           </Grid> */}
         </Grid>

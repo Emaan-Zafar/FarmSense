@@ -34,8 +34,10 @@ export function AnalyticsWebsiteVisits({
   const theme = useTheme();
 
   const chartColors = chart.colors ?? [
-    theme.palette.primary.dark,
-    hexAlpha(theme.palette.primary.light, 0.64),
+    theme.palette.secondary.main,
+    theme.palette.warning.main,
+    theme.palette.secondary.dark,
+    theme.palette.error.main,
   ];
 
   const chartOptions = useChart({
@@ -46,11 +48,24 @@ export function AnalyticsWebsiteVisits({
     },
     xaxis: {
       categories: chart.categories,
+      labels: {
+        style: { colors: '#FFFFFF' }, // Set x-axis labels color to white
+      },
+      
+    },
+    yaxis: {
+      labels: {
+        style: { colors: '#FFFFFF' }, // Set y-axis labels color to white
+      },
     },
     legend: {
       show: true,
+      labels: {
+        colors: '#FFFFFF', // Set legend text color to white
+      },
     },
     tooltip: {
+      theme: 'dark',
       y: {
         formatter: (value: number) => `${value} ${tooltipLabel}`, // Using tooltipLabel here
       },
@@ -62,13 +77,23 @@ export function AnalyticsWebsiteVisits({
     <Card
       {...other}
       sx={{
-        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent background
-        backdropFilter: 'blur(10px)', // Apply blur effect
-        boxShadow: theme.shadows[3], // Retain shadow
+        backgroundColor: '#233a4a', // Semi-transparent background
+        boxShadow: theme.shadows[10], // Retain shadow
         borderRadius: '16px', // Optional: rounded corners
       }}
     >
-      <CardHeader title={title} subheader={subheader} />
+      <CardHeader 
+  title={title}
+  subheader={subheader}
+  sx={{
+    "& .MuiCardHeader-title": {
+      color: "#FFFFFF", // Set title color to white
+    },
+    "& .MuiCardHeader-subheader": {
+      color: "#FFFFFF", // Set subheader color to white
+    },
+  }}
+/>
 
       <Chart
         type="bar"

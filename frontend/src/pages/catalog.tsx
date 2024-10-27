@@ -75,12 +75,12 @@ export default function Page() {
 
       <DashboardContent>
         <Box display="flex" alignItems="center" mb={5}>
-          <Typography variant="h4" flexGrow={1}>
+          <Typography variant="h4" sx={{ color: 'white', flexGrow: 1 }}>
             Cattle Catalogue
           </Typography>
           <Button
             variant="contained"
-            color="inherit"
+            sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} // Change button color
             startIcon={<Iconify icon="mingcute:add-line" />}
             onClick={handleAddCow}
           >
@@ -89,10 +89,11 @@ export default function Page() {
         </Box>
 
         <Card sx={{
-          backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent background
+          backgroundColor: '#7b8687', // Semi-transparent background
           backdropFilter: 'blur(8px)', // Apply blur effect
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Add shadow
           borderRadius: '16px', // Optional: rounded corners
+          color: 'white' // Set the default text color to white
         }}>
           <UserTableToolbar
             numSelected={table.selected.length}
@@ -105,7 +106,7 @@ export default function Page() {
 
           <Scrollbar>
             <TableContainer sx={{ overflow: 'unset' }}>
-              <Table sx={{ minWidth: 800 }}>
+              <Table sx={{ minWidth: 800}}>
                 <UserTableHead
                   order={table.order}
                   orderBy={table.orderBy}
