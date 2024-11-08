@@ -25,6 +25,7 @@ export type UserProps = {
   Sex: string;
   Age: string;
   Weight: number;
+  Health_Status: string;
 };
 
 type UserTableRowProps = {
@@ -87,7 +88,7 @@ export function UserTableRow({ row, selected, onSelectRow, onDeleteCow, index }:
     navigate(`/cow-details/${row.Id}`, { state: { cowData: row } });
   }, [navigate, row]);
 
-  const healthStatus = row.Weight > 200 ? 'healthy' : 'unhealthy';
+  const healthStatus = row.Health_Status;
 
   return (
     <>
@@ -108,7 +109,7 @@ export function UserTableRow({ row, selected, onSelectRow, onDeleteCow, index }:
         <TableCell>{row.Age}</TableCell>
         <TableCell align="center">{row.Sex}</TableCell>
         <TableCell sx={{ paddingLeft: 5 }}>
-        <Label color={healthStatus === 'unhealthy' ? 'error' : 'success'}>{healthStatus}</Label>
+        <Label color={healthStatus === 'Unhealthy' ? 'error' : 'success'}>{healthStatus}</Label>
         </TableCell>
 
         <TableCell align="right">

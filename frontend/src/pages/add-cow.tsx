@@ -49,7 +49,7 @@ export default function AddCow() {
 
   return (
     <DashboardLayout>
-      <Box display="flex" alignItems="center" mb={5} sx={{ ml: 4, mt: 3}}>
+      <Box display="flex" alignItems="center" mb={5} sx={{ ml: 4, mt: 2}}>
         <Typography variant="h4" flexGrow={1}>
           Add New Cow
         </Typography>

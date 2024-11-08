@@ -1,7 +1,9 @@
 import { Box, Button, Card, Typography, CardMedia, CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
+import { Iconify } from 'src/components/iconify';
 import { AnalyticsWebsiteVisitsLineChart } from 'src/components/dashboard_charts/linechart'; // Adjust the import path accordingly
+import VideoUploader from 'src/components/file_upload/video_upload';
 
 // ----------------------------------------------------------------------
 
@@ -9,6 +11,7 @@ export default function Page() {
   const [prediction, setPrediction] = useState<string | null>(null);
   const [timestamp, setTimestamp] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // State for loading
+  const [videoPath, setVideoPath] = useState<string | null>(null);
 
   const handlePredict = async () => {
     // Set loading to true when the prediction is being fetched
@@ -71,10 +74,20 @@ export default function Page() {
   const chartColors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1']; // Different colors for each cow
 
   return (
-    <Box sx={{ ml: 4, mt: 3 }}>
+    <Box sx={{ ml: 4, mt: 2 }}>
       <Typography variant="h4" mb={3}>
         Behaviour Analysis
       </Typography>
+
+      <VideoUploader onUploadSuccess={setVideoPath} />
+      {/* <Button
+            variant="contained"
+            sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} // Change button color
+            startIcon={<Iconify icon="mingcute:add-line" />}
+            // onClick={handleAddCow}
+          >
+            New Cow
+      </Button> */}
 
       {/* Video Box */}
       <Card sx={{ mb: 3, borderRadius: 3, p: 2, backgroundColor: '#f5f5f5', mr: 3 }}>

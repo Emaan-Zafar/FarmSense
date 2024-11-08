@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -10,11 +10,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import { CONFIG } from 'src/config-global';
 
-import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { useNavigate } from 'react-router-dom';
 import { useRouter } from 'src/routes/hooks';
 
+import FileUploader from 'src/components/file_upload/file_upload';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { TableNoData } from 'src/components/table/table-no-data';
@@ -25,27 +25,32 @@ import { UserTableToolbar } from 'src/components/table/user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from 'src/scripts/catalog_utils';
 import type { UserProps } from 'src/components/table/user-table-row';
 import axios from 'axios';
-// ----------------------------------------------------------------------
 
 export default function Page() {
   const table = useTable();
   const [filterId, setFilterName] = useState('');
-  const [cows, setCows] = useState<UserProps[]>([]); // Use state to manage cows
+  const [cows, setCows] = useState<UserProps[]>([]);
+  
+  // File input references for Activity Levels and Symptoms
+  const activityUploaderRef = useRef<HTMLInputElement>(null);
+  const symptomsUploaderRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadComplete = (response: any) => {
+    console.log("Upload response:", response);
+  };
 
   useEffect(() => {
-    // Fetch data when the component loads
     const fetchCows = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/catalog'); // Your API endpoint
-        console.log('Fetched Data:', response.data); // Print the data to the console
-        setCows(response.data); // Save the data to state (optional for later)
+        const response = await axios.get('http://localhost:4000/api/catalog');
+        console.log('Fetched Data:', response.data);
+        setCows(response.data);
       } catch (error) {
         console.error('Error fetching cows:', error);
       }
     };
-
     fetchCows();
-  }, []); // Empty dependency array to run once on component mount
+  }, []);
 
   const navigate = useNavigate();
   const router = useRouter();
@@ -54,13 +59,12 @@ export default function Page() {
     router.push('/add-cow');
   }, [router]);
 
-  // Handle cow deletion
   const handleDeleteCow = (id: string) => {
     setCows((prevCows) => prevCows.filter(cow => cow.Id !== id));
   };
 
   const dataFiltered: UserProps[] = applyFilter({
-    inputData: cows, // Use the state variable instead of _users
+    inputData: cows,
     comparator: getComparator(table.order, table.orderBy),
     filterId,
   });
@@ -74,7 +78,7 @@ export default function Page() {
       </Helmet>
 
       <DashboardContent>
-        <Box display="flex" alignItems="center" mb={5}>
+        <Box display="flex" alignItems="center" mb={5} marginTop={2}>
           <Typography variant="h4" sx={{ color: 'white', flexGrow: 1 }}>
             Cattle Catalogue
           </Typography>
@@ -85,6 +89,22 @@ export default function Page() {
             onClick={handleAddCow}
           >
             New Cow
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ ml: 2 , backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} 
+            startIcon={<Iconify icon="mingcute:add-line" />}
+            onClick={() => activityUploaderRef.current?.click()}
+          >
+            Activity Levels
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ ml: 2 , backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} 
+            startIcon={<Iconify icon="mingcute:add-line" />}
+            onClick={() => symptomsUploaderRef.current?.click()}
+          >
+            Symptoms
           </Button>
         </Box>
 
@@ -110,13 +130,13 @@ export default function Page() {
                 <UserTableHead
                   order={table.order}
                   orderBy={table.orderBy}
-                  rowCount={cows.length} // Update to use cows.length
+                  rowCount={cows.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      cows.map((cow) => cow.Id) // Update to use cows
+                      cows.map((cow) => cow.Id)
                     )
                   }
                   headLabel={[
@@ -140,7 +160,7 @@ export default function Page() {
                         row={row}
                         selected={table.selected.includes(row.Id)}
                         onSelectRow={() => table.onSelectRow(row.Id)}
-                        onDeleteCow={handleDeleteCow} // Pass the delete function
+                        onDeleteCow={handleDeleteCow}
                         index={index}
                       />
                     ))}
@@ -159,7 +179,7 @@ export default function Page() {
           <TablePagination
             component="div"
             page={table.page}
-            count={cows.length} // Update to use cows.length
+            count={cows.length}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
             rowsPerPageOptions={[5, 10, 25]}
@@ -167,6 +187,18 @@ export default function Page() {
           />
         </Card>
       </DashboardContent>
+
+      {/* File Upload Components */}
+      <FileUploader
+        type="activity"
+        onUploadComplete={handleUploadComplete}
+        ref={activityUploaderRef}
+      />
+      <FileUploader
+        type="symptoms"
+        onUploadComplete={handleUploadComplete}
+        ref={symptomsUploaderRef}
+      />
     </>
   );
 }

@@ -65,7 +65,7 @@ export default function EditCow() {
 
   return (
     <DashboardLayout>
-      <Box display="flex" alignItems="center" mb={5} sx={{ ml: 4, mt: 3 }}>
+      <Box display="flex" alignItems="center" mb={5} mt={2} sx={{ ml: 4, mt: 3 }}>
         <Typography variant="h4" flexGrow={1}>
           Edit Cow
         </Typography>

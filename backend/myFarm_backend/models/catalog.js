@@ -7,7 +7,8 @@ var catalogSchema = mongoose.Schema({
     Breed: String,
     Age: Number,
     Height: Number,
-    Weight: Number
+    Weight: Number,
+    Health_Status: String
 }, { collection: 'Catalog' });
 
 var catalogModel = mongoose.model('Catalog', catalogSchema);

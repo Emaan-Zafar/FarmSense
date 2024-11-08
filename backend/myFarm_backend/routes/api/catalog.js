@@ -25,11 +25,11 @@ router.get("/:id", async(req,res) => {
 router.put('/:id', async (req, res) => {
     try {
         const catalogId = req.params.id;
-        const { Sex, Color, Breed, Age, Height, Weight } = req.body;
+        const { Sex, Color, Breed, Age, Height, Weight} = req.body;
 
         const updatedCatalog = await catalogModel.findOneAndUpdate(
             { Id: catalogId }, // Search criteria
-            { Sex, Color, Breed, Age, Height, Weight },    // Fields to update
+            { Sex, Color, Breed, Age, Height, Weight},    // Fields to update
             { new: true }      // Return the updated document
         );
 
@@ -61,7 +61,7 @@ router.delete('/:id', async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const { Id, Sex, Color, Breed, Age, Height, Weight } = req.body;
+        const { Id, Sex, Color, Breed, Age, Height, Weight} = req.body;
 
         // Create a new catalog item using the provided data
         let newCatalog = new catalogModel({

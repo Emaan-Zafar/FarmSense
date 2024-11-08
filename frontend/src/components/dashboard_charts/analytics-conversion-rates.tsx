@@ -39,7 +39,7 @@ export function AnalyticsConversionRates({ title, subheader, chart, ...other }: 
     fill: { colors: chartColors },
     stroke: { width: 2, colors: ['transparent'] },
     tooltip: {
-      theme: 'dark', // Set tooltip background to dark
+      theme: 'dark',
       shared: true,
       intersect: false,
       y: {
@@ -47,9 +47,12 @@ export function AnalyticsConversionRates({ title, subheader, chart, ...other }: 
         title: { formatter: (seriesName: string) => `${seriesName}: ` },
       },
     },
-    xaxis: { categories: chart.categories, labels: { style: { colors: '#FFFFFF' } }},
+    xaxis: { 
+      categories: chart.categories?.map(String),  // Ensure categories are strings
+      labels: { style: { colors: '#FFFFFF' } }
+    },
     yaxis: {
-      labels: { style: { colors: ['#FFFFFF'] } }, // White y-axis label color
+      labels: { style: { colors: ['#FFFFFF'] } },
     },
     dataLabels: {
       enabled: true,

@@ -21,50 +21,129 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 // ----------------------------------------------------------------------
 
-interface CattleRecord {
-  Age: number;
-  // Add other properties if needed (e.g., Id, Sex, etc.)
-  [key: string]: any;
+interface ChartData {
+  label: string;
+  value: number;
+}
+
+interface HealthRecord {
+  cow_id: string;         // Or number, depending on the type of cow_id
+  body_temperature: number;
+  respiratory_rate: number;
+}
+
+interface HealthChartData {
+  categories: string[];   // List of cow IDs
+  series: {
+    name: string;
+    data: number[];       // Array of numbers representing health data
+  }[];
+}
+
+interface Record {
+  ruminating: number;
+}
+
+interface Cow {
+  cow_id: number;
+  records: Record[];
+}
+
+interface ChartData2 {
+  categories: string[];
+  series: {
+    name: string;
+    data: number[];
+  }[];
 }
 
 export default function Page() {
-  const [chartData, setChartData] = useState<{ label: string; value: number }[]>([]);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
+  const [healthChartData, setHealthChartData] = useState<HealthChartData>({
+    categories: [],
+    series: [
+      { name: 'Body Temperature (°C)', data: [] },
+      { name: 'Respiratory Rate (breaths/min)', data: [] },
+    ],
+  });
+  const [ruminatingData, setRuminatingData] = useState<ChartData2>({
+    categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+    series: []
+  });
 
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/catalog');
-        const records: CattleRecord[] = response.data; // Assuming API returns an array of records
-        const ageDistribution = processAgeData(records);
+        const response = await axios.get('http://localhost:4000/api/graphs/age');
+        const ages: number[] = response.data; // API returns an array of age numbers
+        const ageDistribution = processAgeData(ages);
         setChartData(ageDistribution);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
-    fetchData();
-  }, []);
-
-  const processAgeData = (data: CattleRecord[]) => {
-    const ageCount: { [key: number]: number } = {};  // Object where keys are ages and values are the counts
-
-    data.forEach((record) => {
-      const { Age } = record;
-
-      if (ageCount[Age]) {
-        ageCount[Age] += 1;
-      } else {
-        ageCount[Age] = 1;
+    const fetchHealthData = async () => {
+      try {
+        const response = await axios.get<HealthRecord[]>('http://localhost:4000/api/graphs/metrics');
+        const data = response.data;
+    
+        // Ensure cow_id is treated as a string
+        const categories = data.map((record) => String(record.cow_id)); // Convert cow_id to string
+        const bodyTemperatureData = data.map((record) => record.body_temperature);
+        const respiratoryRateData = data.map((record) => record.respiratory_rate);
+    
+        setHealthChartData({
+          categories, // Cow IDs as strings
+          series: [
+            { name: 'Body Temperature (°C)', data: bodyTemperatureData },
+            { name: 'Respiratory Rate (breaths/min)', data: respiratoryRateData },
+          ],
+        });
+      } catch (error) {
+        console.error('Error fetching health data:', error);
       }
-    });
+    };
 
+    const fetchRuminatingData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/graphs/ruminating');
+        const data: Cow[] = response.data;
+
+        // Process the data for the chart
+        const formattedData = data.map((cow) => ({
+          name: `Cow ${cow.cow_id}`, // Label each cow by ID
+          data: cow.records.map((record) => record.ruminating) // Use each day's ruminating value directly
+        }));
+
+        setRuminatingData(prevData => ({
+          ...prevData,
+          series: formattedData
+        }));
+      } catch (error) {
+        console.error('Error fetching ruminating data:', error);
+      }
+    };
+  
+    fetchData();
+    fetchHealthData();
+    fetchRuminatingData();
+  }, []);
+  
+  const processAgeData = (ages: number[]): ChartData[] => {
+    const ageCount: { [age: number]: number } = {};
+  
+    ages.forEach((age) => {
+      ageCount[age] = (ageCount[age] || 0) + 1;
+    });
+  
     // Convert ageCount object to an array of objects for chart rendering
     return Object.keys(ageCount).map((age) => ({
-      label: `Age ${age}`,  // Label for each distinct age
-      value: ageCount[Number(age)],  // The count of how many times that age appears
+      label: `Age ${age}`,
+      value: ageCount[Number(age)],
     }));
-  };
+    };
   
   return (
     <>
@@ -78,7 +157,7 @@ export default function Page() {
       </Helmet>
 
       <DashboardContent maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
+        <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 }, mt: 2}}>
           Hi, Welcome back 👋
         </Typography>
 
@@ -164,51 +243,78 @@ export default function Page() {
 
 
         <Grid xs={12} md={6} lg={8}>
-  <AnalyticsConversionRates
-    title="Cow Health Metrics"
-    subheader="Body Temperature and Respiratory Rate"
-    chart={{
-      categories: ['Cow 1', 'Cow 2', 'Cow 3', 'Cow 4', 'Cow 5'], // Update with actual cow identifiers or names
-      series: [
-        { name: 'Body Temperature (°F)', data: [101.5, 102.3, 100.8, 101.0, 102.0] }, // Example body temperature data
-        { name: 'Respiratory Rate (breaths/min)', data: [20, 25, 22, 18, 23] }, // Example respiratory rate data
-      ],
-    }}
-  />
-</Grid>
+          {/* <AnalyticsConversionRates
+            title="Cow Health Metrics"
+            subheader="Body Temperature and Respiratory Rate"
+            chart={{
+              categories: ['Cow 1', 'Cow 2', 'Cow 3', 'Cow 4', 'Cow 5'], // Update with actual cow identifiers or names
+              series: [
+                { name: 'Body Temperature (°F)', data: [101.5, 102.3, 100.8, 101.0, 102.0] }, // Example body temperature data
+                { name: 'Respiratory Rate (breaths/min)', data: [20, 25, 22, 18, 23] }, // Example respiratory rate data
+              ],
+            }}
+          /> */}
+            <AnalyticsConversionRates
+              title="Cow Health Metrics"
+              subheader="Body Temperature and Respiratory Rate"
+              chart={{
+                categories: ['6612', '6613', '6621', '6629', '6601', '6610'], // cow IDs as strings
+                series: healthChartData.series, // Ensure data is correctly structured
+              }}
+            />
+        </Grid>
 
-<Grid xs={12} md={6} lg={4}>
-  <AnalyticsCurrentSubject
-    title="Daily Cow Activity Breakdown"
-    chart={{
-      categories: [
-        'Eating',
-        'Sleeping',
-        'Ruminating',
-      ],
-      series: [
-        { name: 'Cow A', data: [180, 320, 120] },  // Values in minutes
-        { name: 'Cow B', data: [110, 260, 200] },
-        { name: 'Cow C', data: [90, 350, 160] },
-      ],
-    }}
-  />
-  <Grid xs={12} md={6} lg={8} sx={{ mt: 4 }}>
-        <AnalyticsWebsiteVisitsLineChart
-          title="Average Ruminating Time per Cow"
-          subheader="Duration in minutes over the week"
-          chart={{
-            categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
-            series: [
-              { name: 'Cow A', data: [180, 200, 220, 190, 210, 230, 250] },
-              { name: 'Cow B', data: [160, 170, 180, 175, 185, 195, 205] },
-              { name: 'Cow C', data: [200, 210, 220, 240, 230, 250, 260] },
-            ],
-          }}
-          tooltipLabel="minutes"
-        />
-      </Grid>
-</Grid>
+        <Grid xs={12} md={6} lg={4}>
+          {/* <AnalyticsCurrentSubject
+            title="Daily Cow Activity Breakdown"
+            chart={{
+              categories: [
+                'Eating',
+                'Sleeping',
+                'Ruminating',
+              ],
+              series: [
+                { name: 'Cow A', data: [180, 320, 120] },  // Values in minutes
+                { name: 'Cow B', data: [110, 260, 200] },
+                { name: 'Cow C', data: [90, 350, 160] },
+              ],
+            }}
+          /> */}
+          {/* <AnalyticsWebsiteVisitsLineChart
+                  title="Average Ruminating Time per Cow"
+                  subheader="Duration in minutes over the week"
+                  chart={{
+                    categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+                    series: [
+                      { name: 'Cow A', data: [180, 200, 220, 190, 210, 230, 250] },
+                      { name: 'Cow B', data: [160, 170, 180, 175, 185, 195, 205] },
+                      { name: 'Cow C', data: [200, 210, 220, 240, 230, 250, 260] },
+                    ],
+                  }}
+                  tooltipLabel="minutes"
+                /> */}
+               <AnalyticsWebsiteVisitsLineChart
+              title="Average Ruminating Time per Cow"
+              subheader="Duration in minutes over the week"
+              chart={ruminatingData}
+              tooltipLabel="minutes"
+            />
+          {/* <Grid xs={12} md={6} lg={8} sx={{ mt: 4 }}>
+                <AnalyticsWebsiteVisitsLineChart
+                  title="Average Ruminating Time per Cow"
+                  subheader="Duration in minutes over the week"
+                  chart={{
+                    categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+                    series: [
+                      { name: 'Cow A', data: [180, 200, 220, 190, 210, 230, 250] },
+                      { name: 'Cow B', data: [160, 170, 180, 175, 185, 195, 205] },
+                      { name: 'Cow C', data: [200, 210, 220, 240, 230, 250, 260] },
+                    ],
+                  }}
+                  tooltipLabel="minutes"
+                />
+              </Grid> */}
+        </Grid>
 {/* <Grid xs={12} md={4} lg={8}>
             <AnalyticsTasks title="Tasks" list={_tasks} />
           </Grid> */}

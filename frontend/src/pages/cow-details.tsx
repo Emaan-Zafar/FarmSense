@@ -47,7 +47,7 @@ export default function CowDetailsPage() {
   const [age, setAge] = useState(cowData?.Age || '');
   const [height, setHeight] = useState(cowData?.Height || '');
   const [weight, setWeight] = useState(cowData?.Weight || '');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState(cowData?.Status || '');
 
   // Function to process the fetched data into { label, value } format
   const processChartData = (labels: string[], values: number[]) => ({
@@ -104,12 +104,12 @@ export default function CowDetailsPage() {
     fetchData();
   }, [id]);
   
-  useEffect(() => {
-    if (weight) {
-      const calculatedStatus = weight > 200 ? 'Healthy' : 'Unhealthy';
-      setStatus(calculatedStatus);
-    }
-  }, [weight]);
+  // useEffect(() => {
+  //   if (weight) {
+  //     const calculatedStatus = weight > 200 ? 'Healthy' : 'Unhealthy';
+  //     setStatus(calculatedStatus);
+  //   }
+  // }, [weight]);
 
   return (
     <>
@@ -118,7 +118,7 @@ export default function CowDetailsPage() {
       </Helmet>
 
       <DashboardLayout>
-        <Box display="flex" justifyContent="flex-start" alignItems="center" mb={5} ml={3}>
+        <Box display="flex" justifyContent="flex-start" alignItems="center" mb={5} ml={3} mt={2}>
           <Typography variant="h4" gutterBottom>
             {/* Cow Details: {cowData.name} (ID: {id}) */}
             Cow Details: (ID - {id})

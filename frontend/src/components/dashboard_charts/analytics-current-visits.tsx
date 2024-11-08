@@ -42,17 +42,21 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
     colors: chartColors,
     labels: chart.series.map((item) => item.label),
     stroke: { width: 0 },
-    dataLabels: { enabled: true, dropShadow: { enabled: false } },
+    dataLabels: { 
+      enabled: true, 
+      formatter: (val, opts) => fNumber(opts.w.config.series[opts.seriesIndex]), // Display counts
+      dropShadow: { enabled: false } 
+    },
     tooltip: {
       theme: 'dark',
       y: {
-        formatter: (value: number) => fNumber(value),
+        formatter: (value: number) => fNumber(value), // Show raw counts in tooltip
         title: { formatter: (seriesName: string) => `${seriesName}` },
       },
     },
     plotOptions: { pie: { donut: { labels: { show: false } } } },
     ...chart.options,
-  });
+});
 
   return (
     <Card {...other}
