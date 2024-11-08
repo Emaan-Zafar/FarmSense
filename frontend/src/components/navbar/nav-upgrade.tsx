@@ -61,14 +61,14 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
       sx={{ mb: 4, textAlign: 'center', ...sx }}
       {...other}
     >
-      <Typography
+      {/* <Typography
         variant="h6"
         sx={(theme) => ({
           ...textGradient(`to right, ${theme.vars.palette.secondary.main}, ${theme.vars.palette.warning.main}`)
         })}
       >
         Need Suggestions?
-      </Typography>
+      </Typography> */}
 
       <Box
         component="img"
@@ -78,11 +78,11 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
       />
 
       {/* "Try our AI" Button */}
-      <Button 
+      {/* <Button 
       // onClick={handleOpenPopover} 
       variant="contained" color="inherit">
         Try our AI
-      </Button>
+      </Button> */}
 
       {/* Popover Logic for AI Suggestions */}
       <Popover
@@ -93,9 +93,9 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Box sx={{ p: 2, width: 300 }}>
-          <Typography variant="h6" gutterBottom>
+          {/* <Typography variant="h6" gutterBottom>
             AI Health Suggestions
-          </Typography>
+          </Typography> */}
           {loading ? (
             <CircularProgress />
           ) : (

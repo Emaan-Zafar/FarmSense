@@ -66,7 +66,12 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
       borderRadius: '16px', // Optional: rounded corners
     }}
     >
-      <CardHeader title={title} subheader={subheader} />
+     <CardHeader
+  title={title}
+  subheader={subheader}
+  titleTypographyProps={{ sx: { color: '#FFFFFF' } }}
+  subheaderTypographyProps={{ sx: { color: '#FFFFFF' } }}
+/>
 
       <Chart
         type="pie"

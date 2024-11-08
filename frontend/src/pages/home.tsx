@@ -66,11 +66,6 @@ export default function Page() {
       { name: 'Respiratory Rate (breaths/min)', data: [] },
     ],
   });
-  const [ruminatingData, setRuminatingData] = useState<ChartData2>({
-    categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
-    series: []
-  });
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,29 +101,28 @@ export default function Page() {
       }
     };
 
-    const fetchRuminatingData = async () => {
-      try {
-        const response = await axios.get('http://localhost:4000/api/graphs/ruminating');
-        const data: Cow[] = response.data;
+    // const fetchRuminatingData = async () => {
+    //   try {
+    //     const response = await axios.get('http://localhost:4000/api/graphs/ruminating');
+    //     const data: Cow[] = response.data;
 
-        // Process the data for the chart
-        const formattedData = data.map((cow) => ({
-          name: `Cow ${cow.cow_id}`, // Label each cow by ID
-          data: cow.records.map((record) => record.ruminating) // Use each day's ruminating value directly
-        }));
+    //     // Process the data for the chart
+    //     const formattedData = data.map((cow) => ({
+    //       name: `Cow ${cow.cow_id}`, // Label each cow by ID
+    //       data: cow.records.map((record) => record.ruminating) // Use each day's ruminating value directly
+    //     }));
 
-        setRuminatingData(prevData => ({
-          ...prevData,
-          series: formattedData
-        }));
-      } catch (error) {
-        console.error('Error fetching ruminating data:', error);
-      }
-    };
+    //     setRuminatingData(prevData => ({
+    //       ...prevData,
+    //       series: formattedData
+    //     }));
+    //   } catch (error) {
+    //     console.error('Error fetching ruminating data:', error);
+    //   }
+    // };
   
     fetchData();
     fetchHealthData();
-    fetchRuminatingData();
   }, []);
   
   const processAgeData = (ages: number[]): ChartData[] => {
@@ -238,6 +232,7 @@ export default function Page() {
                 { name: 'Cow 4', data: [55, 60, 65, 70, 75, 80, 85, 90, 95] }, // Average production for Cow 4
               ],
             }}
+            style={{ height: '510px' }}
           />
         </Grid>
 
@@ -292,32 +287,33 @@ export default function Page() {
                     ],
                   }}
                   tooltipLabel="minutes"
-                /> */}
+                />
                <AnalyticsWebsiteVisitsLineChart
               title="Average Ruminating Time per Cow"
               subheader="Duration in minutes over the week"
-              chart={ruminatingData}
+              chart={}
               tooltipLabel="minutes"
-            />
-          {/* <Grid xs={12} md={6} lg={8} sx={{ mt: 4 }}>
+            /> */}
+          <Grid xs={12} md={6} lg={8}>
                 <AnalyticsWebsiteVisitsLineChart
                   title="Average Ruminating Time per Cow"
                   subheader="Duration in minutes over the week"
                   chart={{
                     categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
                     series: [
-                      { name: 'Cow A', data: [180, 200, 220, 190, 210, 230, 250] },
-                      { name: 'Cow B', data: [160, 170, 180, 175, 185, 195, 205] },
-                      { name: 'Cow C', data: [200, 210, 220, 240, 230, 250, 260] },
+                      { name: '6612', data: [180, 200, 220, 190, 210, 230, 250] },
+                      { name: '6613', data: [160, 170, 180, 175, 185, 195, 205] },
+                      { name: '6621', data: [200, 210, 220, 240, 230, 250, 260] },
+                      { name: '6601', data: [180, 225, 150, 200, 130, 165, 245] },
                     ],
                   }}
                   tooltipLabel="minutes"
                 />
-              </Grid> */}
+              </Grid>
         </Grid>
-{/* <Grid xs={12} md={4} lg={8}>
+<Grid xs={12} md={4} lg={12}>
             <AnalyticsTasks title="Tasks" list={_tasks} />
-          </Grid> */}
+          </Grid>
         </Grid>
       </DashboardContent>
     </>

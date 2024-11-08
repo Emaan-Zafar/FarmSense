@@ -43,15 +43,23 @@ export function AnalyticsTasks({ title, subheader, list, ...other }: Props) {
   };
 
   return (
-    <Card {...other}
-    sx={{
-      backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent background
-      backdropFilter: 'blur(10px)', // Apply blur effect
-      boxShadow: theme.shadows[3], // Retain shadow
-      borderRadius: '16px', // Optional: rounded corners
-    }}
+    <Card
+      {...other}
+      sx={{
+        backdropFilter: 'blur(10px)',
+        backgroundColor: '#233a4a',
+        boxShadow: theme.shadows[10],
+        borderRadius: '16px',
+        color: '#FFFFFF',
+      }}
     >
-      <CardHeader title={title} subheader={subheader} sx={{ mb: 1 }} />
+      <CardHeader
+        title={title}
+        subheader={subheader}
+        titleTypographyProps={{ sx: { color: '#FFFFFF' } }}
+        subheaderTypographyProps={{ sx: { color: '#FFFFFF' } }}
+        sx={{ mb: 1 }}
+      />
 
       <Scrollbar sx={{ minHeight: 304 }}>
         <Stack divider={<Divider sx={{ borderStyle: 'dashed' }} />} sx={{ minWidth: 560 }}>
@@ -93,11 +101,6 @@ function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
     console.info('MARK COMPLETE', item.id);
   }, [handleClosePopover, item.id]);
 
-  const handleShare = useCallback(() => {
-    handleClosePopover();
-    console.info('SHARE', item.id);
-  }, [handleClosePopover, item.id]);
-
   const handleEdit = useCallback(() => {
     handleClosePopover();
     console.info('EDIT', item.id);
@@ -116,7 +119,8 @@ function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
           pr: 1,
           py: 1.5,
           display: 'flex',
-          ...(checked && { color: 'text.disabled', textDecoration: 'line-through' }),
+          color: checked ? 'text.disabled' : '#FFFFFF',
+          textDecoration: checked ? 'line-through' : 'none',
           ...sx,
         }}
         {...other}
@@ -134,7 +138,7 @@ function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
             />
           }
           label={item.name}
-          sx={{ m: 0, flexGrow: 1 }}
+          sx={{ m: 0, flexGrow: 1, color: '#FFFFFF' }}
         />
 
         <IconButton
@@ -177,11 +181,6 @@ function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
           <MenuItem onClick={handleEdit}>
             <Iconify icon="solar:pen-bold" />
             Edit
-          </MenuItem>
-
-          <MenuItem onClick={handleShare}>
-            <Iconify icon="solar:share-bold" />
-            Share
           </MenuItem>
 
           <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>

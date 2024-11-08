@@ -13,6 +13,7 @@ export const StyledLegend = styled(Box)(({ theme }) => ({
   justifyContent: 'flex-start',
   fontSize: theme.typography.pxToRem(13),
   fontWeight: theme.typography.fontWeightMedium,
+  color: '#FFFFFF'
 }));
 
 export const StyledDot = styled(Box)(() => ({

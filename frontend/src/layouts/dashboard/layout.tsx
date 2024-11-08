@@ -39,11 +39,36 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
   const layoutQuery: Breakpoint = 'lg';
 
   return (
-    <LayoutSection
-      /** **************************************
-       * Header
-       *************************************** */
-      headerSection={
+    <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden', color: '#FFFFFF' }}> {/* Ensures font color is white globally */}
+      {/* Sidebar */}
+      <NavDesktop
+        data={navData}
+        layoutQuery={layoutQuery}
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '300px',
+          height: '100vh',
+          background: '#122333',
+          color: '#FFFFFF', // Set text color to white in the sidebar
+          overflow: 'hidden',
+          padding: theme.spacing(2),
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+        }}
+      />
+
+      {/* Main Content Wrapper */}
+      <Box
+        sx={{
+          marginLeft: '300px', // Offset for sidebar
+          width: 'calc(100% - 300px)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden', // Prevents the whole page from scrolling
+        }}
+      >
+        {/* Header */}
         <HeaderSection
           layoutQuery={layoutQuery}
           slotProps={{
@@ -52,10 +77,19 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
               sx: { px: { [layoutQuery]: 5 } },
             },
           }}
-          sx={header?.sx}
+          sx={{
+            position: 'fixed',
+            top: 0,
+            width: 'calc(100% - 300px)', // Adjust width to exclude sidebar
+            zIndex: 1,
+            background: '#122333',
+            color: '#FFFFFF', // Ensures text in header is white
+            padding: theme.spacing(2),
+            boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
+          }}
           slots={{
             topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
+              <Alert severity="info" sx={{ display: 'none', borderRadius: 0, color: '#FFFFFF' }}>
                 This is an info Alert.
               </Alert>
             ),
@@ -68,17 +102,12 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                     [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
                   }}
                 />
-                <NavMobile
-                  data={navData}
-                  open={navOpen}
-                  onClose={() => setNavOpen(false)}
-                />
+                <NavMobile data={navData} open={navOpen} onClose={() => setNavOpen(false)} />
               </>
             ),
             rightArea: (
               <Box gap={1} display="flex" alignItems="center">
                 <Searchbar />
-                {/* <LanguagePopover data={_langs} /> */}
                 <NotificationsPopover data={_notifications} />
                 <AccountPopover
                   data={[
@@ -103,55 +132,22 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
             ),
           }}
         />
-      }
-      /** **************************************
-       * Sidebar
-       *************************************** */
-      sidebarSection={
-        <NavDesktop 
-        data={navData} 
-        layoutQuery={layoutQuery} 
-        sx={{ 
-          background: '#122333',
-          backdropFilter: 'blur(8px)', // Apply blur effect
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Add shadow // Gradient from green to blue, oriented vertically// Add your background color here
-          color: theme.palette.success.contrastText, // Text color for better contrast
-          height: '248vh', // Make the sidebar sticky
-          top: 0, // Position it at the top of the viewport // Set height to full viewport height
-          overflowY: 'auto', // Enable vertical scrolling if content exceeds viewport height
-          padding: theme.spacing(2), // Optional: Add some padding // Ensure the sidebar spans the full height
-        }} 
-      />
-      }
-      /** **************************************
-       * Footer
-       *************************************** */
-      footerSection={null}
-      /** **************************************
-       * Style
-       *************************************** */
-      cssVars={{
-        '--layout-nav-vertical-width': '300px',
-        '--layout-dashboard-content-pt': theme.spacing(1),
-        '--layout-dashboard-content-pb': theme.spacing(8),
-        '--layout-dashboard-content-px': theme.spacing(5),
-      }}
-      sx={{
-        [`& .${layoutClasses.hasSidebar}`]: {
-          [theme.breakpoints.up(layoutQuery)]: {
-            pl: 'var(--layout-nav-vertical-width)',
-          },
-        },
-        ...sx,
-        background: '#122333', // Gradient from green to blue
-        color: '#FFFFFF', // Set font color to white for readability
-        backdropFilter: 'blur(5px)', // Optional: Add blur for depth
-        '& *': {
-        color: '#FFFFFF', // Ensure all text is white
-        },
-      }}
-    >
-      <Main>{children}</Main>
-    </LayoutSection>
+
+        {/* Main Content */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            marginTop: '64px', // Offset for header height
+            padding: theme.spacing(3),
+            overflowY: 'auto', // Enable scrolling for content only
+            height: 'calc(100vh - 64px)', // Full height minus header height
+            background: '#122333',
+            color: '#FFFFFF', // Ensures main content text is white
+          }}
+        >
+          <Main>{children}</Main>
+        </Box>
+      </Box>
+    </Box>
   );
 }

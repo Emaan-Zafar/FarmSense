@@ -314,34 +314,33 @@ export const _description = (index: number) =>
     'The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive',
   ][index];
 
-export const _taskNames = (index: number) =>
-  [
-    `Prepare Monthly Financial Report`,
-    `Design New Marketing Campaign`,
-    `Analyze Customer Feedback`,
-    `Update Website Content`,
-    `Conduct Market Research`,
-    `Develop Software Application`,
-    `Organize Team Meeting`,
-    `Create Social Media Posts`,
-    `Review Project Plan`,
-    `Implement Security Protocols`,
-    `Write Technical Documentation`,
-    `Test New Product Features`,
-    `Manage Client Inquiries`,
-    `Train New Employees`,
-    `Coordinate Logistics`,
-    `Monitor Network Performance`,
-    `Develop Training Materials`,
-    `Draft Press Release`,
-    `Prepare Budget Proposal`,
-    `Evaluate Vendor Proposals`,
-    `Perform Data Analysis`,
-    `Conduct Quality Assurance`,
-    `Plan Event Logistics`,
-    `Optimize SEO Strategies`,
-  ][index];
-
+  export const _taskNames = (index: number) =>
+    [
+      `Monitor Cow Health Metrics`,
+      `Review Disease Prediction Reports`,
+      `Check Daily Health Status Alerts`,
+      `Analyze Behavior Insights`,
+      `Update Cow Profiles with Health Data`,
+      `Schedule Veterinary Appointments`,
+      `Review Feed and Nutrient Plans`,
+      `Monitor Water Consumption Levels`,
+      `Analyze Milk Production Trends`,
+      `Generate Weekly Wellness Report`,
+      `Adjust Temperature Thresholds for Health Checks`,
+      `Track Respiratory Rate and Heart Rate`,
+      `Manage Sensor Data Collection`,
+      `Review Action Recognition Results`,
+      `Update Disease Prediction Model`,
+      `Ensure Data Accuracy in Health Records`,
+      `Implement Preventive Health Measures`,
+      `Coordinate with Farm Staff on Health Actions`,
+      `Analyze Environmental Conditions`,
+      `Set Up Health Alerts for Critical Issues`,
+      `Upload New Health Data CSV Files`,
+      `Conduct Weekly Health Checks`,
+      `Review and Update Behavior Analysis`,
+      `Prepare Monthly Farm Health Report`,
+    ][index];
 export const _productNames = (index: number) =>
   [
     'Nike Air Force 1 NDESTRUKT',
