@@ -47,15 +47,15 @@ export default function CowDetailsPage() {
   const [age, setAge] = useState(cowData?.Age || '');
   const [height, setHeight] = useState(cowData?.Height || '');
   const [weight, setWeight] = useState(cowData?.Weight || '');
-  const [status, setStatus] = useState(cowData?.Status || '');
+  const [status, setStatus] = useState(cowData?.Health_Status || '');
 
   // Function to process the fetched data into { label, value } format
-  const processChartData = (labels: string[], values: number[]) => ({
-    categories: labels,  // Labels for x-axis
+  const processChartData = (values: number[]) => ({
+    categories: ['Oestrus', 'Calving', 'Lameness', 'Mastitis', 'LPS', 'Other_disease', 'Accidents', 'Healthy'],  // Hardcoded x-axis labels
     series: [
       {
         name: 'Probability',   // Customize the series name
-        data: values.map((value) => parseFloat((value / 100).toFixed(3))) // Process and round the values
+        data: values.map((value) => parseFloat((value / 100).toFixed(3)))  // Process and round the values
       }
     ]
   });
@@ -91,11 +91,11 @@ export default function CowDetailsPage() {
     const fetchData = async () => {
       try {
         const response = await axios.get<DiseaseData>(`http://localhost:4000/disease/fetch-data/${id}`);
-        const { labels, values } = response.data;
-  
-        // Process the data for chart
-        const transformedData = processChartData(labels, values);
-        setChartData(transformedData);  // Assuming setChartData is your state setter for chart data
+        const { values } = response.data;
+    
+        // Process the data for chart with hardcoded labels
+        const transformedData = processChartData(values);
+        setChartData(transformedData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

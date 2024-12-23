@@ -4,13 +4,28 @@ var healthModel = require("../../models/cow_health")
 var catalogModel = require("../../models/catalog")
 
 router.get("/", async(req,res) => {
-    let health = await healthModel.find();
+    let health = await catalogModel.find();
     return res.send(health);
 });
 
 router.get('/unhealthy-cows', async (req, res) => {
     try {
       const unhealthyCows = await catalogModel.find({ Health_Status: "Unhealthy" });
+      console.log(unhealthyCows);
+      const unhealthyCowsWithDetails = unhealthyCows.map(cow => ({
+        id: cow.Id,
+        description: `Cow ID: ${cow.Id} is unhealthy`,
+      }));
+      res.json(unhealthyCowsWithDetails);
+    } catch (error) {
+      console.error('Error fetching unhealthy cows:', error);
+      res.status(500).json({ message: 'Error fetching unhealthy cows' });
+    }
+  });
+
+  router.get('/healthy-cows', async (req, res) => {
+    try {
+      const unhealthyCows = await catalogModel.find({ Health_Status: "Healthy" });
       console.log(unhealthyCows);
       const unhealthyCowsWithDetails = unhealthyCows.map(cow => ({
         id: cow.Id,

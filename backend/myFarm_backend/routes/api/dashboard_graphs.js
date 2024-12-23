@@ -6,19 +6,32 @@ var healthModel = require("../../models/cow_health")
 
 // Age Pie Chart
 router.get('/age', async (req, res) => {
-    try {
-      // Fetch only the 'age' field from the catalogModel
-      const catalogs = await catalogModel.find({}, { Age: 1 }); // `{ age: 1 }` means only select the 'age' field
-  
-      // Map to extract only the 'age' values if you need to send them as an array
-      const ages = catalogs.map(catalog => catalog.Age);
-  
-      return res.json(ages); // Send back only the array of ages
-    } catch (error) {
-      console.error('Error fetching ages:', error);
-      res.status(500).json({ message: 'Error fetching ages' });
-    }
-  });
+  try {
+    // Fetch only the 'Age' field from the catalogModel
+    const catalogs = await catalogModel.find({}, { Age: 1 }); 
+
+    // Map to extract only the 'Age' values
+    const ages = catalogs.map(catalog => catalog.Age);
+
+    // Group and count occurrences of each age
+    const ageCounts = ages.reduce((acc, age) => {
+      acc[age] = (acc[age] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Format the result into the desired format and sort by age
+    const formattedAges = Object.entries(ageCounts)
+      .sort(([ageA], [ageB]) => parseFloat(ageA) - parseFloat(ageB)) // Sort by age in ascending order
+      .map(([age, count]) => `Age ${age}: ${count}`);
+
+    return res.json(formattedAges); // Send back the formatted array
+  } catch (error) {
+    console.error('Error fetching ages:', error);
+    res.status(500).json({ message: 'Error fetching ages' });
+  }
+});
+
+
 
 // Health Metrics Chart
 router.get("/metrics", async (req, res) => {

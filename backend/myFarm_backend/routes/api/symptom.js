@@ -1,6 +1,7 @@
 const express = require("express");
 let router = express.Router();
-var symptomModel = require("../../models/symptom")
+const axios = require('axios');
+var symptomModel = require("../../models/symptoms")
 // var catalogModel = require("../../models/catalog")
 
 router.get("/", async(req,res) => {
@@ -8,7 +9,7 @@ router.get("/", async(req,res) => {
     return res.send(symptom);
 });
 
-router.get('/symptom/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
       // Fetch all unique cow IDs
       const cowId = req.params.id;

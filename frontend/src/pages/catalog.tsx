@@ -104,7 +104,7 @@ export default function Page() {
             startIcon={<Iconify icon="mingcute:add-line" />}
             onClick={() => symptomsUploaderRef.current?.click()}
           >
-            Symptoms
+            Daily Logs
           </Button>
         </Box>
 

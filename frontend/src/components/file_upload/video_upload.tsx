@@ -1,6 +1,5 @@
-// VideoUploader.tsx
-import { useState } from 'react';
-import { Button, CircularProgress, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Button, Typography } from '@mui/material';
 import axios from 'axios';
 
 interface VideoUploaderProps {
@@ -9,46 +8,41 @@ interface VideoUploaderProps {
 
 export default function VideoUploader({ onUploadSuccess }: VideoUploaderProps) {
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    // Generate a preview URL for the selected video file
+    if (videoFile) {
+      const previewUrl = URL.createObjectURL(videoFile);
+      onUploadSuccess(previewUrl);
+
+      // Clean up the preview URL when component unmounts or file changes
+      return () => URL.revokeObjectURL(previewUrl);
+    }
+    
+    return undefined; // Add this line for consistent return
+  }, [videoFile, onUploadSuccess]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setVideoFile(file);
   };
 
-  const handleUpload = async () => {
-    if (!videoFile) return;
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append('video', videoFile);
-
-    try {
-      const response = await axios.post('http://localhost:4000/api/upload/video', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      // Call the callback with the uploaded video path
-      onUploadSuccess(response.data.filePath);
-    } catch (error) {
-      console.error('Video upload failed:', error);
-    } finally {
-      setUploading(false);
-    }
-  };
-
   return (
     <div>
       <label htmlFor="video-upload">
-        <Button variant="contained" component="span">
+        <Button
+          variant="contained"
+          sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }}
+          component="span"
+        >
           Select Video
         </Button>
         <input
           type="file"
           accept="video/*"
           onChange={handleFileChange}
-          style={{ display: 'none' }} // Hide the input
-          id="video-upload" // Set the id here for association
+          style={{ display: 'none' }}
+          id="video-upload"
         />
       </label>
 
@@ -57,16 +51,6 @@ export default function VideoUploader({ onUploadSuccess }: VideoUploaderProps) {
           Selected file: {videoFile.name}
         </Typography>
       )}
-
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleUpload}
-        disabled={!videoFile || uploading}
-        sx={{ mt: 2 }}
-      >
-        {uploading ? <CircularProgress size={24} color="inherit" /> : 'Upload Video'}
-      </Button>
     </div>
   );
 }

@@ -90,9 +90,9 @@ function onListening() {
   debug('Listening on ' + bind);
 
   // Call the health prediction function when the server starts
-  // initializeHealthPredictions().then(() => {
-  //   console.log("Initial health predictions complete.");
-  // }).catch(err => {
-  //   console.error('Error during initial health predictions:', err);
-  // });
+  initializeHealthPredictions().then(() => {
+    console.log("Initial health predictions complete.");
+  }).catch(err => {
+    console.error('Error during initial health predictions:', err);
+  });
 }

@@ -1,40 +1,40 @@
-// const express = require('express');
-// // const Cow = require('../Models/CowDisease'); // Adjust the path according to your project structure
+const express = require('express');
+// const Cow = require('../Models/CowDisease'); // Adjust the path according to your project structure
 
-// const axios = require('axios');
-// const router = express.Router();
+const axios = require('axios');
+const router = express.Router();
 
-// const CowDisease = require('../../models/activity_level');
-// const CowHealth = require('../../models/CowHealth');
-// const Cow = require('../../models/catalog');
+const CowDisease = require('../../models/activity_level');
+const CowHealth = require('../../models/cow_health');
+const Cow = require('../../models/catalog');
 
-// // New route to predict video using the FastAPI endpoint
-// // I3D ROUTE - BEHAVIOUR ANALYSIS
-// router.get('/predict-video', async (req, res) => {
-//   // const { video_path } = req.params;
-//   video_path = 'C:/Users/aamna/Documents/GitHub/FarmSense/frontend/public/assets/video/Cow.mp4';
-//   console.log(video_path);
+// New route to predict video using the FastAPI endpoint
+// I3D ROUTE - BEHAVIOUR ANALYSIS
+router.get('/predict-video', async (req, res) => {
+  // const { video_path } = req.params;
+  video_path = 'C:/Users/aamna/Documents/GitHub/FarmSense/frontend/public/assets/video/Cow.mp4';
+  console.log(video_path);
 
-//   try {
-//     // Construct the URL for FastAPI
-//     const fastApiUrl = `http://127.0.0.1:8000/predict-video?video_path=${encodeURIComponent(
-//       video_path
-//     )}`;
+  try {
+    // Construct the URL for FastAPI
+    const fastApiUrl = `http://127.0.0.1:8000/predict-video?video_path=${encodeURIComponent(
+      video_path
+    )}`;
 
-//     // Make a GET request to FastAPI
-//     const response = await axios.get(fastApiUrl);
+    // Make a GET request to FastAPI
+    const response = await axios.get(fastApiUrl);
 
-//     // Return the response from FastAPI to the client
-//     res.json(response.data);
-//   } catch (error) {
-//     console.error('Error calling FastAPI:', error);
-//     res
-//       .status(500)
-//       .json({ error: 'An error occurred while calling the FastAPI service.' });
-//   }
-// });
+    // Return the response from FastAPI to the client
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error calling FastAPI:', error);
+    res
+      .status(500)
+      .json({ error: 'An error occurred while calling the FastAPI service.' });
+  }
+});
 
-// // RANDOM FOREST - HEALTHY UNHEALTHY
+// RANDOM FOREST - HEALTHY UNHEALTHY
 // router.get('/predict-cow-health/:cowId', async (req, res) => {
 //   const { cowId } = req.params;
 
@@ -87,198 +87,198 @@
 //   }
 // });
 
-// // LSTM - DISEASE PREDICTION - ADD ID
-// // Route to fetch data from MongoDB and send to model
-// router.get('/fetch-data/:cowId', async (req, res) => {
-//   const { cowId } = req.params;
-//   try {
-//     // const cowHealthData = await CowHealth.find({ cow_id: cowId });
-//     // Fetch only the first 24 documents from MongoDB
-//     const data = await CowDisease.find({cow : cowId}).limit(24);
+// LSTM - DISEASE PREDICTION - ADD ID
+// Route to fetch data from MongoDB and send to model
+router.get('/fetch-data/:cowId', async (req, res) => {
+  const { cowId } = req.params;
+  try {
+    // const cowHealthData = await CowHealth.find({ cow_id: cowId });
+    // Fetch only the first 24 documents from MongoDB
+    const data = await CowDisease.find({cow : cowId}).limit(24);
 
-//     // Transform the data into the format required by your model
-//     const transformedData = {
-//       IN_ALLEYS: [],
-//       REST: [],
-//       EAT: [],
-//       ACTIVITY_LEVEL: [],
-//     };
+    // Transform the data into the format required by your model
+    const transformedData = {
+      IN_ALLEYS: [],
+      REST: [],
+      EAT: [],
+      ACTIVITY_LEVEL: [],
+    };
 
-//     // Populate transformedData with values from MongoDB documents
-//     // Populate transformedData with values from MongoDB documents
-//     data.forEach((doc) => {
-//       transformedData.IN_ALLEYS.push(
-//         doc.IN_ALLEYS !== undefined ? doc.IN_ALLEYS : 0
-//       );
-//       transformedData.REST.push(doc.REST !== undefined ? doc.REST : 0);
-//       transformedData.EAT.push(doc.EAT !== undefined ? doc.EAT : 0);
-//       transformedData.ACTIVITY_LEVEL.push(
-//         doc.ACTIVITY_LEVEL !== undefined ? doc.ACTIVITY_LEVEL : 0
-//       );
-//     });
+    // Populate transformedData with values from MongoDB documents
+    // Populate transformedData with values from MongoDB documents
+    data.forEach((doc) => {
+      transformedData.IN_ALLEYS.push(
+        doc.IN_ALLEYS !== undefined ? doc.IN_ALLEYS : 0
+      );
+      transformedData.REST.push(doc.REST !== undefined ? doc.REST : 0);
+      transformedData.EAT.push(doc.EAT !== undefined ? doc.EAT : 0);
+      transformedData.ACTIVITY_LEVEL.push(
+        doc.ACTIVITY_LEVEL !== undefined ? doc.ACTIVITY_LEVEL : 0
+      );
+    });
 
-//     // Print out lengths of each array for debugging
-//     console.log('Lengths of each array:');
-//     console.log('IN_ALLEYS length:', transformedData.IN_ALLEYS.flat().length);
-//     console.log('REST length:', transformedData.REST.flat().length);
-//     console.log('EAT length:', transformedData.EAT.flat().length);
-//     console.log(
-//       'ACTIVITY_LEVEL length:',
-//       transformedData.ACTIVITY_LEVEL.flat().length
-//     );
+    // Print out lengths of each array for debugging
+    console.log('Lengths of each array:');
+    console.log('IN_ALLEYS length:', transformedData.IN_ALLEYS.flat().length);
+    console.log('REST length:', transformedData.REST.flat().length);
+    console.log('EAT length:', transformedData.EAT.flat().length);
+    console.log(
+      'ACTIVITY_LEVEL length:',
+      transformedData.ACTIVITY_LEVEL.flat().length
+    );
 
-//     // Convert arrays to correct shape for LSTM input
-//     // Ensure each array in transformedData is converted to arrays of numbers
-//     const formattedData = {
-//       IN_ALLEYS: transformedData.IN_ALLEYS.flat().map(Number),
-//       REST: transformedData.REST.flat().map(Number),
-//       EAT: transformedData.EAT.flat().map(Number),
-//       ACTIVITY_LEVEL: transformedData.ACTIVITY_LEVEL.flat().map(Number),
-//     };
+    // Convert arrays to correct shape for LSTM input
+    // Ensure each array in transformedData is converted to arrays of numbers
+    const formattedData = {
+      IN_ALLEYS: transformedData.IN_ALLEYS.flat().map(Number),
+      REST: transformedData.REST.flat().map(Number),
+      EAT: transformedData.EAT.flat().map(Number),
+      ACTIVITY_LEVEL: transformedData.ACTIVITY_LEVEL.flat().map(Number),
+    };
 
-//     console.log(formattedData);
+    console.log(formattedData);
 
-//     // Example: Fetch model predictions
-//     const modelResponse = await axios.post(
-//       'http://127.0.0.1:8000/predict',
-//       formattedData,
-//       {
-//         headers: {
-//           'Cache-Control': 'no-cache',
-//           Pragma: 'no-cache',
-//         },
-//       }
-//     );
+    // Example: Fetch model predictions
+    const modelResponse = await axios.post(
+      'http://127.0.0.1:8000/predict',
+      formattedData,
+      {
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+        },
+      }
+    );
 
-//     console.log(modelResponse.data);
+    console.log(modelResponse.data);
 
-//     res.json(modelResponse.data);
-//   } catch (error) {
-//     console.error('Error fetching data or predicting:', error);
-//     res.status(500).json({ error: 'An error occurred' });
-//   }
-// });
-
-
-// // DASHBOARD - BAR CHART MILK PRODUCTION
-// router.get('/average-milk-production', async (req, res) => {
-//   try {
-//     console.log('Fetching average milk production from cowhealth collection...');
-
-//     // Run aggregation
-//     const averageMilkProduction = await CowHealth.aggregate([
-//       {
-//         $match: {
-//           // Optional: match criteria to ensure we have valid documents
-//           cow_id: { $exists: true },
-//           milk_production: { $exists: true },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: '$cow_id', // Group by cow_id
-//           averageMilkProduction: { $avg: '$milk_production' }, // Calculate average milk production
-//         },
-//       },
-//       {
-//         $sort: { _id: 1 }, // Sort by cow_id
-//       },
-//     ]);
-
-//     console.log('Average Milk Production:', averageMilkProduction);
-
-//     // Prepare the response to match your requirements
-//     const response = averageMilkProduction.map(item => ({
-//       cow_id: item._id, // Use your custom cow_id
-//       average_milk_production: item.averageMilkProduction, // Include the average milk production
-//     }));
-
-//     // Send the response back to the frontend
-//     res.json(response);
-//   } catch (error) {
-//     console.error('Error fetching average milk production:', error);
-//     res.status(500).json({
-//       error: 'An error occurred while fetching average milk production.',
-//     });
-//   }
-// });
+    res.json(modelResponse.data);
+  } catch (error) {
+    console.error('Error fetching data or predicting:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
 
 
+// DASHBOARD - BAR CHART MILK PRODUCTION
+router.get('/average-milk-production', async (req, res) => {
+  try {
+    console.log('Fetching average milk production from cowhealth collection...');
 
-// // BEHAVIOUR ANALYSIS - ALL COWS ACTIVITY CHART
-// router.get('/fetch-all-cow-activity', async (req, res) => {
-//   try {
-//     // Fetch all cows from the Cow model
-//     const cows = await Cow.find({}); // Adjust the model name according to your project structure
+    // Run aggregation
+    const averageMilkProduction = await CowHealth.aggregate([
+      {
+        $match: {
+          // Optional: match criteria to ensure we have valid documents
+          cow_id: { $exists: true },
+          milk_production: { $exists: true },
+        },
+      },
+      {
+        $group: {
+          _id: '$cow_id', // Group by cow_id
+          averageMilkProduction: { $avg: '$milk_production' }, // Calculate average milk production
+        },
+      },
+      {
+        $sort: { _id: 1 }, // Sort by cow_id
+      },
+    ]);
 
-//     if (cows.length === 0) {
-//       return res.status(404).json({
-//         message: 'No cows found in the database',
-//       });
-//     }
+    console.log('Average Milk Production:', averageMilkProduction);
 
-//     // Prepare an array to hold activity levels for each cow
-//     const cowActivityLevels = [];
+    // Prepare the response to match your requirements
+    const response = averageMilkProduction.map(item => ({
+      cow_id: item._id, // Use your custom cow_id
+      average_milk_production: item.averageMilkProduction, // Include the average milk production
+    }));
 
-//     // Iterate over each cow to fetch their activity levels
-//     for (const cow of cows) {
-//       // Fetch activity levels for the current cow
-//       const activityData = await CowDisease.find({
-//         cow: cow.id,
-//         date: '2018-10-26',
-//       }).sort({
-//         hour: 1,
-//       });
-
-//       // Extract activity levels
-//       const activityLevels = activityData.map((doc) => doc.ACTIVITY_LEVEL || 0);
-
-//       // Push the cow ID and activity levels to the array
-//       cowActivityLevels.push({
-//         cowId: cow.id,
-//         activityLevels,
-//       });
-//     }
-
-//     // Return the cow activity levels to the client
-//     res.json(cowActivityLevels);
-//   } catch (error) {
-//     console.error('Error fetching all cow activity data:', error);
-//     res
-//       .status(500)
-//       .json({ error: 'An error occurred while fetching cow activity data.' });
-//   }
-// });
+    // Send the response back to the frontend
+    res.json(response);
+  } catch (error) {
+    console.error('Error fetching average milk production:', error);
+    res.status(500).json({
+      error: 'An error occurred while fetching average milk production.',
+    });
+  }
+});
 
 
-// // ACTIVITY CHART FOR INDIVIDUAL COW
-// router.get('/fetch-cow-activity/:cowId', async (req, res) => {
-//   const { cowId } = req.params;
 
-//   try {
-//     const data = await CowDisease.find({
-//       cow: cowId,
-//       date: "25/10/2018",
-//     }).sort({ hour: 1 }); // Sorting by hour to get data in time order
+// BEHAVIOUR ANALYSIS - ALL COWS ACTIVITY CHART
+router.get('/fetch-all-cow-activity', async (req, res) => {
+  try {
+    // Fetch all cows from the Cow model
+    const cows = await Cow.find({}); // Adjust the model name according to your project structure
 
-//     if (data.length === 0) {
-//       return res.status(404).json({
-//         message: 'No records found for the specified cow and date',
-//       });
-//     }
+    if (cows.length === 0) {
+      return res.status(404).json({
+        message: 'No cows found in the database',
+      });
+    }
 
-//     // Extract hours and activity levels separately
-//     const hours = data.map((doc) => doc.hour);
-//     const activityLevels = data.map((doc) => doc.ACTIVITY_LEVEL || 0); // Use 0 if activity level is not defined
+    // Prepare an array to hold activity levels for each cow
+    const cowActivityLevels = [];
 
-//     console.log('Hours:', hours);
-//     console.log('Activity Levels:', activityLevels);
+    // Iterate over each cow to fetch their activity levels
+    for (const cow of cows) {
+      // Fetch activity levels for the current cow
+      const activityData = await CowDisease.find({
+        cow: cow.id,
+        date: '2018-10-26',
+      }).sort({
+        hour: 1,
+      });
 
-//     res.json({ cowId, hours, activityLevels }); // Return separately
-//   } catch (error) {
-//     console.error('Error fetching cow activity data:', error);
-//     res.status(500).json({ error: 'An error occurred' });
-//   }
-// });
+      // Extract activity levels
+      const activityLevels = activityData.map((doc) => doc.ACTIVITY_LEVEL || 0);
 
-// module.exports = router;
+      // Push the cow ID and activity levels to the array
+      cowActivityLevels.push({
+        cowId: cow.id,
+        activityLevels,
+      });
+    }
+
+    // Return the cow activity levels to the client
+    res.json(cowActivityLevels);
+  } catch (error) {
+    console.error('Error fetching all cow activity data:', error);
+    res
+      .status(500)
+      .json({ error: 'An error occurred while fetching cow activity data.' });
+  }
+});
+
+
+// ACTIVITY CHART FOR INDIVIDUAL COW
+router.get('/fetch-cow-activity/:cowId', async (req, res) => {
+  const { cowId } = req.params;
+
+  try {
+    const data = await CowDisease.find({
+      cow: cowId,
+      date: "2023-10-25",
+    }).sort({ hour: 1 }); // Sorting by hour to get data in time order
+
+    if (data.length === 0) {
+      return res.status(404).json({
+        message: 'No records found for the specified cow and date',
+      });
+    }
+
+    // Extract hours and activity levels separately
+    const hours = data.map((doc) => doc.hour);
+    const activityLevels = data.map((doc) => doc.ACTIVITY_LEVEL || 0); // Use 0 if activity level is not defined
+
+    console.log('Hours:', hours);
+    console.log('Activity Levels:', activityLevels);
+
+    res.json({ cowId, hours, activityLevels }); // Return separately
+  } catch (error) {
+    console.error('Error fetching cow activity data:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+module.exports = router;

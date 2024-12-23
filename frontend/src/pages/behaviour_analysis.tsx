@@ -1,7 +1,6 @@
 import { Box, Button, Card, Typography, CardMedia, CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
-import { Iconify } from 'src/components/iconify';
 import { AnalyticsWebsiteVisitsLineChart } from 'src/components/dashboard_charts/linechart'; // Adjust the import path accordingly
 import VideoUploader from 'src/components/file_upload/video_upload';
 
@@ -26,8 +25,36 @@ export default function Page() {
       const response = await axios.get('http://localhost:4000/disease/predict-video');
       
       // Update the prediction with the response from the API
-      const predictedAction = response.data.prediction; // Adjust this based on the API response structure
-      setPrediction(`Action Detected: ${predictedAction}`);
+      const predictedAction = response.data.predicted_label;  // Adjust this based on the API response structure
+      let action = "";
+      if (predictedAction === 0) {
+        action = "Grazing";
+      } else if (predictedAction === 1) {
+        action = "Walking";
+      } else if (predictedAction === 2) {
+        action = "Ruminating-Standing";
+      } else if (predictedAction === 3) {
+        action = "Ruminating-Lying";
+      } else if (predictedAction === 4) {
+        action = "Resting-Standing";
+      } else if (predictedAction === 5) {
+        action = "Resting-Lying";
+      } else if (predictedAction === 6) {
+        action = "Drinking";
+      } else if (predictedAction === 7) {
+        action = "Grooming";
+      } else if (predictedAction === 8) {
+        action = "Other";
+      } else if (predictedAction === 9) {
+        action = "Hidden";
+      } 
+      else {
+        action = "Running";
+      }
+    
+      // Set the translated prediction
+      setPrediction(`Action Detected: ${action}`);
+
 
     } catch (error) {
       console.error('Error fetching prediction:', error);
@@ -42,19 +69,19 @@ export default function Page() {
   const dummyChartData = {
     series: [
       {
-        name: "Cow 1",
+        name: "6610",
         data: [10, 15, 12, 25, 30, 28, 35, 40], // Activity levels for Cow 1
       },
       {
-        name: "Cow 2",
+        name: "6612",
         data: [5, 20, 18, 30, 25, 35, 40, 50], // Activity levels for Cow 2
       },
       {
-        name: "Cow 3",
+        name: "6613",
         data: [15, 10, 25, 20, 30, 40, 45, 50], // Activity levels for Cow 3
       },
       {
-        name: "Cow 4",
+        name: "6629",
         data: [20, 30, 25, 35, 40, 50, 55, 60], // Activity levels for Cow 4
       },
     ],
@@ -80,25 +107,19 @@ export default function Page() {
       </Typography>
 
       <VideoUploader onUploadSuccess={setVideoPath} />
-      {/* <Button
-            variant="contained"
-            sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} // Change button color
-            startIcon={<Iconify icon="mingcute:add-line" />}
-            // onClick={handleAddCow}
-          >
-            New Cow
-      </Button> */}
 
       {/* Video Box */}
-      <Card sx={{ mb: 3, borderRadius: 3, p: 2, backgroundColor: '#f5f5f5', mr: 3 }}>
-        <CardMedia
-          component="video"
-          height="400"
-          controls
-          src="/assets/video/Cow.mp4" // Replace with your video source
-          sx={{ borderRadius: 2 }}
-        />
-      </Card>
+      {videoPath && (
+        <Card sx={{ mb: 3, borderRadius: 3, p: 2, backgroundColor: '#f5f5f5', mr: 3 }}>
+          <CardMedia
+            component="video"
+            height="400"
+            controls
+            src={videoPath}  // Dynamically set the video path from the uploader
+            sx={{ borderRadius: 2 }}
+          />
+        </Card>
+      )}
 
       {/* Predict Button and Output Card Side by Side */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3} mr={3}>
@@ -107,7 +128,7 @@ export default function Page() {
           variant="contained"
           color="primary"
           onClick={handlePredict}
-          sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }} // Change button color
+          sx={{ backgroundColor: '#30ac66', color: 'white', '&:hover': { backgroundColor: '#f57c00' } }}
           disabled={loading} // Disable the button while loading
         >
           {loading ? <CircularProgress size={24} color="inherit" /> : 'Predict'}
@@ -127,7 +148,7 @@ export default function Page() {
       </Box>
 
       {/* Line Chart with Dummy Data */}
-      <Box sx={{ mb: 3, mr: 3 }}> {/* Added margin on the right */}
+      <Box sx={{ mb: 3, mr: 3 }}>
         <AnalyticsWebsiteVisitsLineChart
           title="Cow Activity Over Time"
           subheader="Activity Levels"

@@ -47,13 +47,30 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
       formatter: (val, opts) => fNumber(opts.w.config.series[opts.seriesIndex]), // Display counts
       dropShadow: { enabled: false } 
     },
+    // tooltip: {
+    //   theme: 'dark',
+    //   y: {
+    //     formatter: (value: number) => {
+    //       return fNumber(value);
+    //     },
+    //     title: {
+    //       formatter: () => {
+    //         // Return the hardcoded title
+    //         return 'Age ';
+    //       },
+    //     },
+    //   },
+    // },
     tooltip: {
       theme: 'dark',
       y: {
-        formatter: (value: number) => fNumber(value), // Show raw counts in tooltip
-        title: { formatter: (seriesName: string) => `${seriesName}` },
+        formatter: (value: number) => fNumber(value), // Directly return the formatted value
+        title: {
+          formatter: () => 'Age Count: ', // Directly return the hardcoded title
+        },
       },
     },
+
     plotOptions: { pie: { donut: { labels: { show: false } } } },
     ...chart.options,
 });
