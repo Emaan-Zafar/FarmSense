@@ -71,7 +71,7 @@ export default function VideoGallery() {
               <h2>{video.fileName}</h2>
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video controls>
-                <source src={`http://localhost:4000/uploaded-videos/${video.filePath}`} type="video/mp4" />
+                <source src={`http://localhost:4000/uploads/videos/${video.filePath}`} type="video/mp4" />
               </video>
             </div>
           ))}

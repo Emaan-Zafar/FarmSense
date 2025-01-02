@@ -15,7 +15,7 @@ var fileRouter = require('./routes/api/upload');
 var diseaseRouter = require('./routes/api/CowDiseaseRoutes');
 var videoRouter = require('./routes/api/video-upload')
 
-const videoUploadPath = path.join('C:/Users/aamna/Downloads/uploads/videos');
+// const videoUploadPath = path.join('C:/Users/aamna/Downloads/uploads/videos');
 var app = express();
 app.use(cors());
 // const path = require('path');
@@ -24,7 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
-app.use('/uploaded-videos', express.static(videoUploadPath));
+// app.use('/uploaded-videos', express.static(videoUploadPath));
+app.use('/uploads/videos', express.static(path.join(__dirname, 'uploads/videos')));
+
 
 // app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/assets', express.static(path.join(__dirname, 'public')));
