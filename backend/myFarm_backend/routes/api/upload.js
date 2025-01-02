@@ -10,7 +10,6 @@ const SymptomsModel = require('../../models/cow_health');
 const { initializeHealthPredictions } = require('../../controllers/healthPredictionController'); 
 
 const upload = multer({ dest: 'uploads/' });
-const upload_video = multer({ dest: path.join(__dirname, '../backend/public/assets/video') });
 
 router.post("/", upload.single('file'), (req, res) => {
   try {
@@ -62,18 +61,6 @@ router.post("/", upload.single('file'), (req, res) => {
     console.error('Upload Error:', err.message); // Log upload error
     res.status(500).json({ error: 'Failed to process file upload' });
   }
-});
-
-router.post('/video', upload_video.single('video'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'Video upload failed' });
-  }
-
-  // Construct the relative path for accessing the video (frontend can access it)
-  const videoPath = `/assets/video/${req.file.filename}`;
-
-  // Respond with the video path
-  res.json({ message: 'Video uploaded successfully', videoPath });
 });
 
 module.exports = router;

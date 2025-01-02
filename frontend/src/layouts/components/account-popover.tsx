@@ -1,7 +1,5 @@
 import type { IconButtonProps } from '@mui/material/IconButton';
-
 import { useState, useCallback } from 'react';
-
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -11,9 +9,7 @@ import MenuList from '@mui/material/MenuList';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
-
 import { useRouter, usePathname } from 'src/routes/hooks';
-
 import { _myAccount } from 'src/_mock';
 
 // ----------------------------------------------------------------------
@@ -29,9 +25,7 @@ export type AccountPopoverProps = IconButtonProps & {
 
 export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps) {
   const router = useRouter();
-
   const pathname = usePathname();
-
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -53,6 +47,9 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
     },
     [handleClosePopover, router]
   );
+
+  // Exclude "Home", "Profile", and "Settings" from data by passing a filtered version
+  const filteredData = data.filter(item => !['Home', 'Profile', 'Settings'].includes(item.label));
 
   return (
     <>
@@ -118,7 +115,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
             },
           }}
         >
-          {data.map((option) => (
+          {filteredData.map((option) => (
             <MenuItem
               key={option.label}
               selected={option.href === pathname}

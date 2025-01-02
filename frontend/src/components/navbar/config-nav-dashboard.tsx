@@ -19,6 +19,11 @@ export const navData = [
     icon: icon('ic-catalog'),
   },
   {
+    title: 'Video Gallery',
+    path: '/dashboard/video_gallery',
+    icon: icon('ic-behaviour'),
+  },
+  {
     title: 'Behaviour Analysis',
     path: '/dashboard/behaviour_analysis',
     icon: icon('ic-behaviour'),

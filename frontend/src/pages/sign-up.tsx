@@ -12,16 +12,14 @@ import { useRouter } from 'src/routes/hooks';
 import { Iconify } from 'src/components/iconify';
 import Snackbar from '@mui/material/Snackbar'; // Import Snackbar for notifications
 import Alert, { AlertColor } from '@mui/material/Alert'; // Import Alert for success/error messages
+import axios from 'axios'; // Import axios for HTTP requests
 
 // ----------------------------------------------------------------------
-
-const DUMMY_EMAIL = 'hello@gmail.com';
-const DUMMY_PASSWORD = '@demo1234';
-
 export default function SignUpPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState(''); // Add username input
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -29,34 +27,75 @@ export default function SignUpPage() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [severity, setSeverity] = useState<AlertColor>('success'); // Set the severity state type
 
-  const handleSignUp = useCallback(() => {
+  const validatePassword = (inputPassword: string): string | null => {
+    // Example restrictions
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(inputPassword);
+    const hasLowerCase = /[a-z]/.test(inputPassword);
+    const hasNumber = /\d/.test(inputPassword);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(inputPassword);
+  
+    if (inputPassword.length < minLength) {
+      return `Password must be at least ${minLength} characters long.`;
+    }
+    if (!hasUpperCase) {
+      return 'Password must include at least one uppercase letter.';
+    }
+    if (!hasLowerCase) {
+      return 'Password must include at least one lowercase letter.';
+    }
+    if (!hasNumber) {
+      return 'Password must include at least one number.';
+    }
+    if (!hasSpecialChar) {
+      return 'Password must include at least one special character.';
+    }
+    return null; // Valid password
+  };
+  
+  const handleSignUp = useCallback(async () => {
     // Simple validation
-    if (!email || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword || !username) {
       setErrorMessage('All fields are required.');
       setSeverity('error');
       setOpenSnackbar(true);
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match.');
       setSeverity('error');
       setOpenSnackbar(true);
       return;
     }
-
-    // Dummy authentication check
-    if (email === DUMMY_EMAIL && password === DUMMY_PASSWORD) {
-      setSuccessMessage('Successfully signed up!');
+  
+    // Validate password restrictions
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setErrorMessage(passwordError);
+      setSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    }
+  
+    try {
+      // Send the data to the backend API
+      const response = await axios.post('http://localhost:4000/api/users/signup', {
+        username,
+        email,
+        password,
+      });
+  
+      setSuccessMessage(response.data.message);
       setSeverity('success');
       setOpenSnackbar(true);
-      router.push('/sign-in');
-    } else {
-      setErrorMessage('Email is already in use.');
+      router.push('/sign-in'); // Redirect to sign-in page after successful sign-up
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || 'Error occurred');
       setSeverity('error');
       setOpenSnackbar(true);
     }
-  }, [email, password, confirmPassword, router]);
+  }, [email, password, confirmPassword, username, router]);
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -75,6 +114,16 @@ export default function SignUpPage() {
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
       />
+      <TextField
+        fullWidth
+        name="username"
+        label="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        InputLabelProps={{ shrink: true }}
+        sx={{ mb: 3 }}
+      />
+      
       <TextField
         fullWidth
         name="password"

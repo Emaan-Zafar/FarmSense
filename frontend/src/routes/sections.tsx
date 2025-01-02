@@ -11,16 +11,17 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));
-export const BlogPage = lazy(() => import('src/pages/behaviour_analysis'));
-export const UserPage = lazy(() => import('src/pages/catalog'));
+export const BehaviourPage = lazy(() => import('src/pages/behaviour_analysis'));
+export const CatalogPage = lazy(() => import('src/pages/catalog'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const SignUpPage = lazy(() => import('src/pages/sign-up'));
 export const ForgotPassword = lazy(() => import('src/pages/forgot-password'));
-export const ProductsPage = lazy(() => import('src/pages/disease_detection'));
+export const DiseasePage = lazy(() => import('src/pages/disease_detection'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const AddCow = lazy(() => import('src/pages/add-cow'));
 export const EditCow = lazy(() => import('src/pages/edit-cow'));
 export const CowDetails = lazy(() => import('src/pages/cow-details'));
+export const VideoPage = lazy(() => import('src/pages/video_gallery'));
 // ----------------------------------------------------------------------
 
 const renderFallback = (
@@ -54,9 +55,10 @@ export function Router() {
       ),
       children: [
         { element: <HomePage />, index: true },
-        { path: 'catalog', element: <UserPage /> },
-        { path: 'disease_detection', element: <ProductsPage /> },
-        { path: 'behaviour_analysis', element: <BlogPage /> },
+        { path: 'catalog', element: <CatalogPage /> },
+        { path: 'disease_detection', element: <DiseasePage /> },
+        { path: 'behaviour_analysis', element: <BehaviourPage /> },
+        { path: 'video_gallery', element: <VideoPage />},
       ],
     },
     {
