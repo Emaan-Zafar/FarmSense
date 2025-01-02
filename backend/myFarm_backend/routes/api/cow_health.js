@@ -1,6 +1,6 @@
 const express = require("express");
 let router = express.Router();
-var healthModel = require("../../models/cow_health")
+var CowHealth = require("../../models/cow_health")
 var catalogModel = require("../../models/catalog")
 
 router.get("/", async(req,res) => {
@@ -114,5 +114,7 @@ router.get('/unhealthy-cows', async (req, res) => {
 //       res.status(500).json({ error: 'An error occurred' });
 //     }
 //   });
+
+
   
 module.exports = router;
