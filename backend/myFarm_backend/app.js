@@ -9,7 +9,8 @@ var usersRouter = require('./routes/api/users');
 var catalogRouter = require('./routes/api/catalog');
 var activityRouter = require('./routes/api/activity_level');
 var healthRouter = require('./routes/api/cow_health');
-var graphRouter = require('./routes/api/dashboard_graphs');
+var AIRouter = require('./routes/api/ai_Suggest');
+var graphRouter = require('./routes/api/dashboard_graphs')
 // var symptomRouter = require('./routes/api/symptom')
 var fileRouter = require('./routes/api/upload');
 var diseaseRouter = require('./routes/api/CowDiseaseRoutes');
@@ -38,7 +39,7 @@ app.use('/api/graphs', graphRouter);
 // app.use('/api/disease', symptomRouter);
 app.use('/api/upload', fileRouter);
 app.use('/disease', diseaseRouter);
-app.use('/api/video-upload', videoRouter);
+app.use('/api/ai_Suggest', AIRouter);
 
 mongoose.connect("mongodb+srv://aamnashahid14:casperHP14@cluster0.oe7dp.mongodb.net/FarmSense?retryWrites=true&w=majority")
   .then(() => console.log('MongoDB connected...'))

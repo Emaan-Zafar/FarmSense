@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Popover from '@mui/material/Popover';
 import CircularProgress from '@mui/material/CircularProgress';
 import { textGradient } from 'src/theme/styles';
+import { useRouter } from 'src/routes/hooks';
 // import axios from 'axios';
 import { StackProps } from '@mui/material/Stack'; // Import StackProps
 
@@ -26,6 +27,11 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
     temperature: 101.5,
     activity: 'low',
   }), []);
+
+  const router = useRouter();
+  const handleAiSuggestions = useCallback(() => {
+    router.push('/ai-suggestions');
+  }, [router]);
 
   // // Fetch AI suggestions from the backend
   // const fetchAISuggestions = useCallback(async () => {
@@ -61,14 +67,14 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
       sx={{ mb: 4, textAlign: 'center', ...sx }}
       {...other}
     >
-      {/* <Typography
+      <Typography
         variant="h6"
         sx={(theme) => ({
           ...textGradient(`to right, ${theme.vars.palette.secondary.main}, ${theme.vars.palette.warning.main}`)
         })}
       >
         Need Suggestions?
-      </Typography> */}
+      </Typography>
 
       <Box
         component="img"
@@ -78,11 +84,11 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
       />
 
       {/* "Try our AI" Button */}
-      {/* <Button 
-      // onClick={handleOpenPopover} 
+      <Button 
+      onClick={handleAiSuggestions} 
       variant="contained" color="inherit">
         Try our AI
-      </Button> */}
+      </Button>
 
       {/* Popover Logic for AI Suggestions */}
       <Popover
@@ -93,14 +99,9 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Box sx={{ p: 2, width: 300 }}>
-          {/* <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             AI Health Suggestions
-          </Typography> */}
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <Typography variant="body1">{aiSuggestion || 'Fetching suggestions...'}</Typography>
-          )}
+          </Typography>
         </Box>
       </Popover>
     </Box>
