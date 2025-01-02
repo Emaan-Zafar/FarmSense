@@ -7,7 +7,7 @@ const VideoModel = require('../../models/video');
 
 const videoStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'uploads/videos');
+      cb(null, 'C:/Users/Sheikh.Qasim/Documents/Cow_videos');
     },
     filename: (req, file, cb) => {
       cb(null, Date.now() + '-' + file.originalname);

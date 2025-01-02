@@ -16,7 +16,7 @@ var fileRouter = require('./routes/api/upload');
 var diseaseRouter = require('./routes/api/CowDiseaseRoutes');
 var videoRouter = require('./routes/api/video-upload')
 
-// const videoUploadPath = path.join('C:/Users/aamna/Downloads/uploads/videos');
+const videoUploadPath = path.join('C:\Users\Sheikh.Qasim\Documents\Cow_videos');
 var app = express();
 app.use(cors());
 // const path = require('path');
@@ -25,8 +25,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
-// app.use('/uploaded-videos', express.static(videoUploadPath));
-app.use('/uploads/videos', express.static(path.join(__dirname, 'uploads/videos')));
+app.use('/uploaded-videos', express.static(videoUploadPath));
+//app.use('/uploads/videos', express.static(path.join(__dirname, 'uploads/videos')));
 
 
 // app.use(express.static(path.join(__dirname, 'public')));
@@ -42,6 +42,7 @@ app.use('/api/graphs', graphRouter);
 app.use('/api/upload', fileRouter);
 app.use('/disease', diseaseRouter);
 app.use('/api/ai_Suggest', AIRouter);
+app.use('/api/video-upload',videoRouter);
 
 mongoose.connect("mongodb+srv://aamnashahid14:casperHP14@cluster0.oe7dp.mongodb.net/FarmSense?retryWrites=true&w=majority")
   .then(() => console.log('MongoDB connected...'))

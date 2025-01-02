@@ -1,4 +1,4 @@
-import { Box, Button, Typography, Snackbar, Alert } from '@mui/material';
+import { Box, Button, Typography, Snackbar, Alert, Grid, Paper } from '@mui/material';
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
 import { Helmet } from 'react-helmet-async';
 import { CONFIG } from 'src/config-global';
@@ -11,6 +11,7 @@ interface Video {
   _id: string;
   fileName: string;
   filePath: string;
+  uploadedAt: string;
 }
 
 export default function VideoGallery() {
@@ -49,9 +50,8 @@ export default function VideoGallery() {
         <title>{`Video Gallery - ${CONFIG.appName}`}</title>
       </Helmet>
 
-      <DashboardLayout>
-        <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ mt: 2, ml: 4, mr: 4 }}>
-          <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold', textAlign: 'left', mr: 10 }}>
+        <Box display="flex" alignItems="left" mb={5} marginTop={2} sx={{ px: 4}}>
+          <Typography variant="h4" sx={{ color: 'white', flexGrow: 1 }}>
             Video Gallery
           </Typography>
 
@@ -65,18 +65,31 @@ export default function VideoGallery() {
           </Button>
         </Box>
 
-        <div>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 2, px: 4 }}>
           {videos.map((video) => (
-            <div key={video._id}>
-              <h2>{video.fileName}</h2>
+            <Box key={video._id} sx={{ backgroundColor: '#7b8687', borderRadius: 2, boxShadow: 2, padding: 2 }}>
+              <Typography variant="h6" sx={{ color: 'white', textAlign: 'center' }}>
+                {video.fileName}
+              </Typography>
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-              <video controls>
-                <source src={`http://localhost:4000/uploads/videos/${video.filePath}`} type="video/mp4" />
+              <video controls width="100%">
+                <source src={`http://localhost:4000/uploaded-videos/${video.filePath}`} type="video/mp4" />
+                <track kind="subtitles" srcLang="en" label="English" />
               </video>
-            </div>
+              <Typography
+                variant="body2"
+                  sx={{
+                    color: 'black',
+                    textAlign: 'center',
+                    marginTop: 1,
+                    fontSize: '0.875rem', // Small font size
+                  }}
+                >
+                  Uploaded At: {new Date(video.uploadedAt).toLocaleString()}
+                </Typography>
+            </Box>
           ))}
-        </div>
-      </DashboardLayout>
+        </Box>
 
       {/* Video uploader */}
       <VideoUploader
@@ -90,7 +103,6 @@ export default function VideoGallery() {
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        // anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           {snackbarMessage}

@@ -32,6 +32,8 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+let signedInUser = null; // Store signed-in user in memory
+
 // Sign in route
 router.post('/signin', async (req, res) => {
     try {
@@ -48,12 +50,26 @@ router.post('/signin', async (req, res) => {
       if (!isMatch) {
         return res.status(400).json({ message: 'Invalid credentials' });
       }
+
+      // Store the username and email in memory
+     signedInUser = { username: user.username, email: user.email };
   
       res.status(200).json({ message: 'Sign in successful'});
     } catch (error) {
       res.status(500).json({ message: 'Error signing in', error: error.message });
     }
   });
+
+  // Endpoint to get signed-in user's data
+router.get('/get-signed-in-user', (req, res) => {
+   // Prevent caching by setting cache-control headers
+   res.setHeader('Cache-Control', 'no-store');
+  if (!signedInUser) {
+    return res.status(400).json({ message: 'No user signed in' });
+  }
+
+  res.status(200).json(signedInUser);
+});
   
 // Logout route
 router.post('/logout', (req, res) => {
