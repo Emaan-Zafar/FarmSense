@@ -22,6 +22,8 @@ export const AddCow = lazy(() => import('src/pages/add-cow'));
 export const EditCow = lazy(() => import('src/pages/edit-cow'));
 export const CowDetails = lazy(() => import('src/pages/cow-details'));
 export const VideoPage = lazy(() => import('src/pages/video_gallery'));
+export const GuidedSuggestions = lazy(() => import('src/pages/guided-suggestions'));
+export const AISuggestions = lazy(() => import('src/pages/ai-suggestions'));
 // ----------------------------------------------------------------------
 
 const renderFallback = (
@@ -110,6 +112,18 @@ export function Router() {
     {
       path: '*',
       element: <Navigate to="/404" replace />,
+    },
+    {
+      path: 'guided-suggestions',
+      element: (
+          <GuidedSuggestions />
+      ),
+    },
+    {
+      path: 'ai-suggestions',
+      element: (
+          <AISuggestions />
+      ),
     },
   ]);
 }

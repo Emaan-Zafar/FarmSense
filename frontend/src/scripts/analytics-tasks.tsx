@@ -14,10 +14,10 @@ import IconButton from '@mui/material/IconButton';
 import CardHeader from '@mui/material/CardHeader';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
-
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { useTheme } from '@mui/material/styles';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -33,13 +33,25 @@ type Props = CardProps & {
 export function AnalyticsTasks({ title, subheader, list, ...other }: Props) {
   const theme = useTheme();
   const [selected, setSelected] = useState(['2']);
+  const [tasks, setTasks] = useState(list);
 
   const handleClickComplete = (taskId: string) => {
     const tasksCompleted = selected.includes(taskId)
       ? selected.filter((value) => value !== taskId)
       : [...selected, taskId];
-
     setSelected(tasksCompleted);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+  };
+
+  const handleEditTask = (taskId: string, newName: string) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, name: newName } : task
+    );
+    setTasks(updatedTasks);
   };
 
   return (
@@ -63,12 +75,14 @@ export function AnalyticsTasks({ title, subheader, list, ...other }: Props) {
 
       <Scrollbar sx={{ minHeight: 304 }}>
         <Stack divider={<Divider sx={{ borderStyle: 'dashed' }} />} sx={{ minWidth: 560 }}>
-          {list.map((item) => (
+          {tasks.map((item) => (
             <Item
               key={item.id}
               item={item}
               checked={selected.includes(item.id)}
               onChange={() => handleClickComplete(item.id)}
+              onDelete={handleDeleteTask}
+              onEdit={handleEditTask}
             />
           ))}
         </Stack>
@@ -83,10 +97,15 @@ type ItemProps = BoxProps & {
   checked: boolean;
   item: Props['list'][number];
   onChange: (id: string) => void;
+  onDelete: (id: string) => void;
+  onEdit: (id: string, newName: string) => void;
 };
 
-function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
+function Item({ item, checked, onChange, onDelete, onEdit, sx, ...other }: ItemProps) {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(item.name);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
@@ -97,19 +116,38 @@ function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
   }, []);
 
   const handleMarkComplete = useCallback(() => {
+    onChange(item.id); // Toggle completion state
     handleClosePopover();
-    console.info('MARK COMPLETE', item.id);
-  }, [handleClosePopover, item.id]);
+  }, [handleClosePopover, item.id, onChange]);
 
   const handleEdit = useCallback(() => {
+    setIsEditing(true);
     handleClosePopover();
-    console.info('EDIT', item.id);
-  }, [handleClosePopover, item.id]);
+  }, [handleClosePopover]);
+
+  const handleSaveEdit = () => {
+    onEdit(item.id, editedName);
+    setIsEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditedName(item.name);
+    setIsEditing(false);
+  };
 
   const handleDelete = useCallback(() => {
+    setOpenDialog(true);
     handleClosePopover();
-    console.info('DELETE', item.id);
-  }, [handleClosePopover, item.id]);
+  }, [handleClosePopover]);
+
+  const handleConfirmDelete = () => {
+    onDelete(item.id);
+    setOpenDialog(false);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <>
@@ -125,29 +163,52 @@ function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
         }}
         {...other}
       >
-        <FormControlLabel
-          control={
-            <Checkbox
-              disableRipple
-              checked={checked}
-              onChange={onChange}
-              inputProps={{
-                name: item.name,
-                'aria-label': 'Checkbox demo',
-              }}
-            />
-          }
-          label={item.name}
-          sx={{ m: 0, flexGrow: 1, color: '#FFFFFF' }}
-        />
+        {isEditing ? (
+          <TextField
+            value={editedName}
+            onChange={(e) => setEditedName(e.target.value)}
+            variant="outlined"
+            size="small"
+            autoFocus
+            fullWidth
+            sx={{
+              m: 0,
+              flexGrow: 1,
+              color: '#FFFFFF',
+              input: { color: '#FFFFFF' },
+            }}
+          />
+        ) : (
+          <FormControlLabel
+            control={
+              <Checkbox
+                disableRipple
+                checked={checked}
+                onChange={onChange}
+                inputProps={{
+                  name: item.name,
+                  'aria-label': 'Checkbox demo',
+                }}
+              />
+            }
+            label={item.name}
+            sx={{ m: 0, flexGrow: 1, color: '#FFFFFF' }}
+          />
+        )}
 
-        <IconButton
-          color={openPopover ? 'inherit' : 'default'}
-          onClick={handleOpenPopover}
-          sx={{ alignSelf: 'flex-start' }}
-        >
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
+        {isEditing ? (
+          <IconButton onClick={handleSaveEdit} sx={{ ml: 2, color: '#FFFFFF' }}>
+            <Iconify icon="solar:check-circle-bold" />
+          </IconButton>
+        ) : (
+          <IconButton
+            color={openPopover ? 'inherit' : 'default'}
+            onClick={handleOpenPopover}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        )}
       </Box>
 
       <Popover
@@ -189,6 +250,19 @@ function Item({ item, checked, onChange, sx, ...other }: ItemProps) {
           </MenuItem>
         </MenuList>
       </Popover>
+
+      <Dialog open={openDialog} onClose={handleCancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>Are you sure you want to delete this task?</DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="secondary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
