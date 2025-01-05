@@ -93,10 +93,11 @@ module.exports = router;*/
 
 const express = require("express");
 const axios = require("axios");
+require('dotenv').config();
 
 let router = express.Router();
 
-const OPENAI_API_KEY = "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"; // Replace with your actual API key
+const OPENAI_API_KEY =  process.env.OPENAI_API_KEY;
 
 router.post("/cowChat", async (req, res) => {
   const { message } = req.body;
