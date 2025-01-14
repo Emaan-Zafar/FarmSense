@@ -126,7 +126,7 @@ export default function SignInPage() {
         >
           Sign in
         </LoadingButton>
-        <Link variant="body2" color="inherit" sx={{ mb: 1.5 }} onClick={() => setIsForgotPassword(true)}>
+        <Link variant="body2" color="inherit" sx={{ mb: 1.5 }} onClick={() => router.push('/forgot-password')}>
           Forgot password?
         </Link>
       </Box>
