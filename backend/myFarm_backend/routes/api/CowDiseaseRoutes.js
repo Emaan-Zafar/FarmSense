@@ -8,24 +8,37 @@ const CowDisease = require('../../models/activity_level');
 const CowHealth = require('../../models/cow_health');
 const Cow = require('../../models/catalog');
 
-// New route to predict video using the FastAPI endpoint
 // I3D ROUTE - BEHAVIOUR ANALYSIS
 router.get('/predict-video', async (req, res) => {
-  // const { video_path } = req.params;
-  video_path = 'C:/Users/aamna/Documents/GitHub/FarmSense/frontend/public/assets/video/Cow.mp4';
-  console.log(video_path);
+  const staticFolderPath = 'C:/Users/aamna/Downloads/uploads/videos/';
+  // const output = "C:/Users/aamna/Documents/GitHub/FarmSense/models/";
+  const staticOutputPath = "C:/Users/aamna/Documents/GitHub/FarmSense/models/";
+
+  const { videoPath } = req.query; // Change to 'videoPath' to match the frontend parameter
+  const fullVideoPath = `${staticFolderPath}${videoPath}`;
+
+  if (!videoPath) {
+    return res.status(400).json({ error: 'Video path is required.' });
+  }
 
   try {
     // Construct the URL for FastAPI
-    const fastApiUrl = `http://127.0.0.1:8000/predict-video?video_path=${encodeURIComponent(
-      video_path
-    )}`;
+    const fastApiUrl = `http://127.0.0.1:8000/predict-video?video_path=${encodeURIComponent(fullVideoPath)}`;
 
     // Make a GET request to FastAPI
     const response = await axios.get(fastApiUrl);
 
-    // Return the response from FastAPI to the client
-    res.json(response.data);
+    // const { annotated_video, csv_file } = response.data;
+    console.log(response.data);
+    const { annotated_video} = response.data;
+    annotatedVideoPath= `${staticFolderPath}${annotated_video}`, 
+  
+
+    res.json({
+      message: response.data.message,
+      annotatedVideoPath: `http://localhost:4000/uploaded-videos/${annotated_video}`, // Adjust this URL based on your frontend's static file server
+      // csvFilePath: `http://localhost:3000/static/${csv_file}`, // Adjust this URL as well
+    });
   } catch (error) {
     console.error('Error calling FastAPI:', error);
     res
@@ -33,6 +46,8 @@ router.get('/predict-video', async (req, res) => {
       .json({ error: 'An error occurred while calling the FastAPI service.' });
   }
 });
+
+
 
 // RANDOM FOREST - HEALTHY UNHEALTHY
 // router.get('/predict-cow-health/:cowId', async (req, res) => {

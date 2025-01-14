@@ -1,7 +1,6 @@
 import { Box, Button, Card, Typography, CardMedia, CircularProgress, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { AnalyticsWebsiteVisitsLineChart } from 'src/components/dashboard_charts/linechart';
 
 interface Video {
   _id: string;
@@ -10,10 +9,15 @@ interface Video {
   uploadedAt: string;
 }
 
+interface ResponseData {
+  message: string;
+  annotatedVideoPath: string;
+}
+
 export default function Page() {
-  const [videos, setVideos] = useState<Video[]>([]);  // List of videos
+  const [videos, setVideos] = useState<Video[]>([]); // List of videos
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Selected video
-  const [prediction, setPrediction] = useState<string | null>(null);
+  const [responseData, setResponseData] = useState<ResponseData | null>(null); // Prediction response
   const [timestamp, setTimestamp] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -30,46 +34,23 @@ export default function Page() {
     fetchVideos();
   }, []);
 
+  // Handle prediction
   const handlePredict = async () => {
     setLoading(true);
-    const currentTimestamp = new Date().toLocaleString();
-    setTimestamp(currentTimestamp);
+    setTimestamp(new Date().toLocaleString());
 
     try {
-      const response = await axios.get('http://localhost:4000/disease/predict-video', {
-        params: { videoPath: selectedVideo }, // Pass the selected video to the backend
-      });
-
-      const predictedAction = response.data.predicted_label;
-      let action = "";
-      if (predictedAction === 0) {
-        action = "Grazing";
-      } else if (predictedAction === 1) {
-        action = "Walking";
-      } else if (predictedAction === 2) {
-        action = "Ruminating-Standing";
-      } else if (predictedAction === 3) {
-        action = "Ruminating-Lying";
-      } else if (predictedAction === 4) {
-        action = "Resting-Standing";
-      } else if (predictedAction === 5) {
-        action = "Resting-Lying";
-      } else if (predictedAction === 6) {
-        action = "Drinking";
-      } else if (predictedAction === 7) {
-        action = "Grooming";
-      } else if (predictedAction === 8) {
-        action = "Other";
-      } else if (predictedAction === 9) {
-        action = "Hidden";
-      } 
-      else {
-        action = "Running";
+      const videoFileName = selectedVideo?.split('/').pop(); // Extract the file name from the video URL
+      if (videoFileName) {
+        const response = await axios.get('http://localhost:4000/disease/predict-video', {
+          params: { videoPath: videoFileName },
+        });
+        setResponseData(response.data); // Save the response data
+      } else {
+        console.error('No video selected');
       }
-      setPrediction(`Action Detected: ${action[predictedAction] || "Unknown"}`);
     } catch (error) {
-      console.error('Error fetching prediction:', error);
-      setPrediction('Error: Unable to fetch prediction');
+      console.error('Error:', error);
     } finally {
       setLoading(false);
     }
@@ -77,7 +58,7 @@ export default function Page() {
 
   return (
     <Box sx={{ ml: 4, mt: 2 }}>
-      <Typography variant="h4" mb={3} sx={{ color: "white" }}>
+      <Typography variant="h4" mb={3} sx={{ color: 'white' }}>
         Behaviour Analysis
       </Typography>
 
@@ -86,22 +67,22 @@ export default function Page() {
         <FormControl
           fullWidth
           sx={{
-            "& .MuiOutlinedInput-root": {
-              borderColor: "white",
-              color: "white",
+            '& .MuiOutlinedInput-root': {
+              borderColor: 'white',
+              color: 'white',
             },
-            "& .MuiInputLabel-root": {
-              color: "white",
+            '& .MuiInputLabel-root': {
+              color: 'white',
             },
-            "& .MuiSelect-select": {
-              color: "white",
+            '& .MuiSelect-select': {
+              color: 'white',
             },
           }}
         >
           <InputLabel id="video-select-label">Select Video</InputLabel>
           <Select
             labelId="video-select-label"
-            value={selectedVideo || ""}
+            value={selectedVideo || ''}
             onChange={(e) => setSelectedVideo(e.target.value)}
           >
             {videos.map((video) => (
@@ -119,13 +100,13 @@ export default function Page() {
           color="primary"
           onClick={handlePredict}
           sx={{
-            backgroundColor: "#30ac66",
-            color: "white",
-            "&:hover": { backgroundColor: "#f57c00" },
+            backgroundColor: '#30ac66',
+            color: 'white',
+            '&:hover': { backgroundColor: '#f57c00' },
           }}
           disabled={!selectedVideo || loading}
         >
-          {loading ? <CircularProgress size={24} color="inherit" /> : "Predict"}
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'Predict'}
         </Button>
       </Box>
 
@@ -135,7 +116,7 @@ export default function Page() {
           mb: 3,
           borderRadius: 3,
           p: 2,
-          backgroundColor: "#f5f5f5",
+          backgroundColor: '#f5f5f5',
           mr: 3,
         }}
       >
@@ -143,29 +124,48 @@ export default function Page() {
           component="video"
           height="400"
           controls
-          src={selectedVideo || ""} // Always show the media player
+          src={selectedVideo || ''}
           sx={{ borderRadius: 2 }}
         />
       </Card>
 
-      {/* Prediction Output */}
-      {prediction && (
-        <Card
-          sx={{
-            p: 2,
-            backgroundColor: "#e0f7fa",
-            borderRadius: 3,
-            minWidth: "250px",
-            mb: 3,
-          }}
-        >
-          <Typography variant="subtitle1">
-            <strong>Timestamp:</strong> {timestamp}
-          </Typography>
-          <Typography variant="subtitle1">
-            <strong>{prediction}</strong>
-          </Typography>
-        </Card>
+      {/* Display prediction output */}
+      {responseData && (
+        <>
+          {/* Display message */}
+          <Card
+            sx={{
+              p: 2,
+              backgroundColor: '#e0f7fa',
+              borderRadius: 3,
+              minWidth: '250px',
+              mb: 3,
+            }}
+          >
+            <Typography variant="subtitle1">
+              <strong>Message:</strong> {responseData.message}
+            </Typography>
+          </Card>
+
+          {/* Display annotated video */}
+          {responseData.annotatedVideoPath && (
+            <Box mt={4}>
+              <Typography variant="h6" mb={2}>
+                Annotated Video Result:
+              </Typography>
+              <video controls width="600">
+                <source src={responseData.annotatedVideoPath} type="video/mp4" />
+                <track
+                  kind="captions"
+                  src="captions.vtt" // Optional: Provide a valid path for captions
+                  srcLang="en"
+                  label="English"
+                />
+                Your browser does not support the video tag.
+              </video>
+            </Box>
+          )}
+        </>
       )}
     </Box>
   );

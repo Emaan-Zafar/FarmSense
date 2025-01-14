@@ -87,7 +87,7 @@ export function NavUpgrade({ sx, ...other }: StackProps) {
       <Button 
       onClick={handleAiSuggestions} 
       variant="contained" color="inherit">
-        Try our AI
+          FarmSense&apos;s AI
       </Button>
 
       {/* Popover Logic for AI Suggestions */}

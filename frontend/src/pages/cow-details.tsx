@@ -104,12 +104,6 @@ export default function CowDetailsPage() {
     fetchData();
   }, [id]);
   
-  // useEffect(() => {
-  //   if (weight) {
-  //     const calculatedStatus = weight > 200 ? 'Healthy' : 'Unhealthy';
-  //     setStatus(calculatedStatus);
-  //   }
-  // }, [weight]);
 
   return (
     <>

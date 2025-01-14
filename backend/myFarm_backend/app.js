@@ -16,16 +16,16 @@ var fileRouter = require('./routes/api/upload');
 var diseaseRouter = require('./routes/api/CowDiseaseRoutes');
 var videoRouter = require('./routes/api/video-upload')
 
-const videoUploadPath = path.join('C:\Users\Sheikh.Qasim\Documents\Cow_videos');
+const videoUploadPath = path.join('C:/Users/aamna/Downloads/uploads/videos');
 var app = express();
 app.use(cors());
-// const path = require('path');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
 app.use('/uploaded-videos', express.static(videoUploadPath));
+// app.use('/models', express.static('C:/Users/aamna/Documents/GitHub/FarmSense/models'));
 //app.use('/uploads/videos', express.static(path.join(__dirname, 'uploads/videos')));
 
 

@@ -73,7 +73,8 @@ export default function VideoGallery() {
               </Typography>
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video controls width="100%">
-                <source src={`http://localhost:4000/uploaded-videos/${video.filePath}`} type="video/mp4" />
+              <source src={`http://localhost:4000/uploaded-videos/${video.filePath}`} type="video/mp4" />
+              {/* <source src={`http://localhost:4000/uploads/videos/${video.filePath}`} type="video/mp4" /> */}
                 <track kind="subtitles" srcLang="en" label="English" />
               </video>
               <Typography
