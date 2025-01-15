@@ -1,0 +1,7 @@
+cow_id,date,time,body_temperature,milk_production,respiratory_rate,walking_capacity,sleeping_duration,body_condition_score,heart_rate,eating_duration,lying_down_duration,ruminating,rumen_fill
+6601,7/01/2025,12,40,10.9,24,9352,3.9,1,60,3.5,12.2,5.5,1
+6610,7/01/2025,12,38.9,24.1,37,11987,4.2,2,62,3.9,12.2,5.8,4
+6612,7/01/2025,12,38.6,14.7,42,13121,3.2,3,71,3,12.6,5.9,2
+6619,7/01/2025,12,40.1,12.5,14,5257,6.9,2,39,1.8,15.3,3.3,2
+6621,7/01/2025,12,39.7,22.5,48,10352,4.6,2,63,3.1,13.5,6.3,5
+,,,,,,,,,,,,,

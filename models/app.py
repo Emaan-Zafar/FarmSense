@@ -873,10 +873,18 @@ async def predict_video(video_path: str = Query(..., description="Path to the vi
         print(f"Re-encoding complete! Video saved at {encoded_video_path}")
         encoded_video = "annotated_intervals.mp4"
 
+        # Read the CSV contents
+        csv_data = []
+        with open(cow_behaviour, "r") as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                csv_data.append(row)
+
+
         return {
             "message": "Prediction completed successfully.",
             "annotated_video": encoded_video,
-            # "csv_file": cow_behaviour,
+              "csv_data": csv_data,
         }
     except Exception as e:
         print(f"Error processing video: {e}")

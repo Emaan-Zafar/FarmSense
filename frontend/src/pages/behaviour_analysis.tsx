@@ -1,4 +1,23 @@
-import { Box, Button, Card, Typography, CardMedia, CircularProgress, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  Typography,
+  CardMedia,
+  CircularProgress,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  SelectChangeEvent,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+  Paper,
+} from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -12,6 +31,7 @@ interface Video {
 interface ResponseData {
   message: string;
   annotatedVideoPath: string;
+  csvData: Array<{ [key: string]: any }>; // Flexible type for table rows
 }
 
 export default function Page() {
@@ -34,7 +54,11 @@ export default function Page() {
     fetchVideos();
   }, []);
 
-  // Handle prediction
+  const handleVideoChange = (event: SelectChangeEvent<string>) => {
+    setSelectedVideo(event.target.value);
+    setResponseData(null); // Clear previous predictions
+  };
+
   const handlePredict = async () => {
     setLoading(true);
     setTimestamp(new Date().toLocaleString());
@@ -83,7 +107,7 @@ export default function Page() {
           <Select
             labelId="video-select-label"
             value={selectedVideo || ''}
-            onChange={(e) => setSelectedVideo(e.target.value)}
+            onChange={handleVideoChange}
           >
             {videos.map((video) => (
               <MenuItem
@@ -132,7 +156,6 @@ export default function Page() {
       {/* Display prediction output */}
       {responseData && (
         <>
-          {/* Display message */}
           <Card
             sx={{
               p: 2,
@@ -147,24 +170,55 @@ export default function Page() {
             </Typography>
           </Card>
 
-          {/* Display annotated video */}
+          <Typography variant="h6" mb={2}>
+            Annotated Video:
+          </Typography>
           {responseData.annotatedVideoPath && (
-            <Box mt={4}>
-              <Typography variant="h6" mb={2}>
-                Annotated Video Result:
-              </Typography>
-              <video controls width="600">
-                <source src={responseData.annotatedVideoPath} type="video/mp4" />
-                <track
-                  kind="captions"
-                  src="captions.vtt" // Optional: Provide a valid path for captions
-                  srcLang="en"
-                  label="English"
-                />
-                Your browser does not support the video tag.
-              </video>
-            </Box>
+            <Card
+              sx={{
+                mb: 3,
+                borderRadius: 3,
+                p: 2,
+                backgroundColor: '#f5f5f5',
+              }}
+            >
+              <CardMedia
+                component="video"
+                height="400"
+                controls
+                src={responseData.annotatedVideoPath}
+                sx={{ borderRadius: 2 }}
+              />
+            </Card>
           )}
+
+          {/* Display prediction table */}
+          <Box>
+            <Typography variant="h6" mb={2}>
+              Behavior Prediction Table:
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {responseData.csvData.length > 0 &&
+                      Object.keys(responseData.csvData[0]).map((key) => (
+                        <TableCell key={key}>{key}</TableCell>
+                      ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {responseData.csvData.map((row, index) => (
+                    <TableRow key={index}>
+                      {Object.values(row).map((value, colIndex) => (
+                        <TableCell key={colIndex}>{value}</TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
         </>
       )}
     </Box>

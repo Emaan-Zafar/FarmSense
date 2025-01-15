@@ -11,7 +11,7 @@ var activityRouter = require('./routes/api/activity_level');
 var healthRouter = require('./routes/api/cow_health');
 var AIRouter = require('./routes/api/ai_Suggest');
 var graphRouter = require('./routes/api/dashboard_graphs')
-// var symptomRouter = require('./routes/api/symptom')
+var symptomRouter = require('./routes/api/symptom')
 var fileRouter = require('./routes/api/upload');
 var diseaseRouter = require('./routes/api/CowDiseaseRoutes');
 var videoRouter = require('./routes/api/video-upload')
@@ -38,7 +38,7 @@ app.use('/api/catalog', catalogRouter);
 app.use('/api/activity', activityRouter);
 app.use('/api/health', healthRouter);
 app.use('/api/graphs', graphRouter);
-// app.use('/api/disease', symptomRouter);
+app.use('/api/symptom', symptomRouter);
 app.use('/api/upload', fileRouter);
 app.use('/disease', diseaseRouter);
 app.use('/api/ai_Suggest', AIRouter);

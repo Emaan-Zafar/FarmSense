@@ -7,10 +7,10 @@ import { AnalyticsConversionRates } from 'src/components/dashboard_charts/analyt
 import { AnalyticsWebsiteVisits } from 'src/components/dashboard_charts/analytics-website-visits';
 import axios from 'axios';
 
-interface DiseaseData {
-  labels: string[];
-  values: number[];
-}
+// interface DiseaseData {
+//   labels: string[];
+//   values: number[];
+// }
 
 interface ActivityData {
   hour: number;
@@ -23,13 +23,13 @@ export default function CowDetailsPage() {
   const { state } = useLocation();
   const { cowData } = state || {}; // Get cowData from state
 
-  const [chartData, setChartData] = useState<{
-    categories: string[];
-    series: { name: string; data: number[] }[];
-  }>({
-    categories: [],
-    series: [],
-  });
+  // const [chartData, setChartData] = useState<{
+  //   categories: string[];
+  //   series: { name: string; data: number[] }[];
+  // }>({
+  //   categories: [],
+  //   series: [],
+  // });
 
   const [activityChartData, setActivityChartData] = useState<{
     categories: string[];
@@ -39,6 +39,11 @@ export default function CowDetailsPage() {
     series: [],
   });
   
+  const [diseaseDetails, setDiseaseDetails] = useState<{
+    disease: string;
+    symptoms: string[];
+  } | null>(null);
+
   // Set initial form values from cowData
   const [id, setId] = useState(cowData?.Id || '');
   const [sex, setSex] = useState(cowData?.Sex || '');
@@ -50,15 +55,15 @@ export default function CowDetailsPage() {
   const [status, setStatus] = useState(cowData?.Health_Status || '');
 
   // Function to process the fetched data into { label, value } format
-  const processChartData = (values: number[]) => ({
-    categories: ['Oestrus', 'Calving', 'Lameness', 'Mastitis', 'LPS', 'Other_disease', 'Accidents', 'Healthy'],  // Hardcoded x-axis labels
-    series: [
-      {
-        name: 'Probability',   // Customize the series name
-        data: values.map((value) => parseFloat((value / 100).toFixed(3)))  // Process and round the values
-      }
-    ]
-  });
+  // const processChartData = (values: number[]) => ({
+  //   categories: ['Oestrus', 'Calving', 'Lameness', 'Mastitis', 'LPS', 'Other_disease', 'Accidents', 'Healthy'],  // Hardcoded x-axis labels
+  //   series: [
+  //     {
+  //       name: 'Probability',   // Customize the series name
+  //       data: values.map((value) => parseFloat((value / 100).toFixed(3)))  // Process and round the values
+  //     }
+  //   ]
+  // });
 
   const processActivityData = (hours: number[], activityLevels: number[]) => ({
   categories: hours.map(hour => `${hour}`), // Format hours for x-axis labels
@@ -86,25 +91,49 @@ export default function CowDetailsPage() {
   
     fetchData();
   }, [id]);
-  
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<DiseaseData>(`http://localhost:4000/disease/fetch-data/${id}`);
-        const { values } = response.data;
-    
-        // Process the data for chart with hardcoded labels
-        const transformedData = processChartData(values);
-        setChartData(transformedData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+    const fetchDiseaseData = async () => {
+      if (status === 'Unhealthy') {
+        try {
+          const response = await axios.get(
+            `http://localhost:4000/api/symptom/${id}`
+          );
+          const { prediction, activeSymptoms } = response.data;
+  
+          setDiseaseDetails({
+            disease: prediction,
+            symptoms: activeSymptoms,
+          });
+        } catch (error) {
+          console.error('Error fetching disease data:', error);
+        }
+      } else {
+        // Clear the disease details for healthy cattle
+        setDiseaseDetails(null);
       }
     };
   
-    fetchData();
-  }, [id]);
+    fetchDiseaseData();
+  }, [status, id]);
   
-
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get<DiseaseData>(`http://localhost:4000/disease/fetch-data/${id}`);
+  //       const { values } = response.data;
+    
+  //       // Process the data for chart with hardcoded labels
+  //       const transformedData = processChartData(values);
+  //       setChartData(transformedData);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, [id]);
+  
   return (
     <>
       <Helmet>
@@ -185,11 +214,34 @@ export default function CowDetailsPage() {
                 padding: 3,
               }}
             >
-              <AnalyticsWebsiteVisits
+               {status === 'Healthy' ? (
+            <Typography variant="h6" color="white">
+              No disease detected. The cattle is healthy.
+            </Typography>
+          ) : diseaseDetails ? (
+            <>
+              <Typography variant="h6" color="red">
+                Disease Detected: {diseaseDetails.disease}
+              </Typography>
+              <Typography variant="body1">
+                Symptoms Detected:
+                <ul>
+                  {diseaseDetails.symptoms.map((symptom, index) => (
+                    <li key={index}>{symptom}</li>
+                  ))}
+                </ul>
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="h6" color="orange">
+              Fetching disease details...
+            </Typography>
+          )}
+              {/* <AnalyticsWebsiteVisits
                 title="Disease Prediction"
                 chart={chartData}
                 tooltipLabel="chance"
-              />
+              /> */}
             </Card>
           </Grid>
         </Grid>

@@ -30,14 +30,16 @@ router.get('/predict-video', async (req, res) => {
 
     // const { annotated_video, csv_file } = response.data;
     console.log(response.data);
-    const { annotated_video} = response.data;
+    // const { annotated_video} = response.data;
+    const { annotated_video, csv_data, message } = response.data;
+
     annotatedVideoPath= `${staticFolderPath}${annotated_video}`, 
   
 
     res.json({
       message: response.data.message,
       annotatedVideoPath: `http://localhost:4000/uploaded-videos/${annotated_video}`, // Adjust this URL based on your frontend's static file server
-      // csvFilePath: `http://localhost:3000/static/${csv_file}`, // Adjust this URL as well
+      csvData: csv_data,
     });
   } catch (error) {
     console.error('Error calling FastAPI:', error);

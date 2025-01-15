@@ -11,6 +11,7 @@ const { initializeHealthPredictions } = require('../../controllers/healthPredict
 
 const upload = multer({ dest: 'uploads/' });
 
+
 router.post("/", upload.single('file'), (req, res) => {
   try {
     const { type } = req.body;
@@ -23,11 +24,31 @@ router.post("/", upload.single('file'), (req, res) => {
 
     const results = [];
     console.log('Starting file read...');
-
-    fs.createReadStream(req.file.path)
+   
+    fs.createReadStream(req.file.path, { encoding: 'utf8' })
       .pipe(csvParser())
       .on('data', (data) => {
         console.log('Processing row:', data); // Log each row for debugging
+        
+        console.log('Row data:', data);
+        console.log('Row keys:', Object.keys(data));
+
+        // Check for empty row (all values are null or undefined)
+        const isEmptyRow = Object.values(data).every((value) => value === null || value === undefined || value === '');
+        if (isEmptyRow) {
+          console.log('Skipping empty row:', data);
+          return; // Skip this row
+        }
+
+        if (data.cow_id) {
+          data.cow_id = String(data.cow_id).trim(); // Ensure it's treated as a string
+        }
+      
+        // // Check for missing required fields like cow_id
+        // if (!data.cow_id || data.cow_id.trim() === '') {
+        //   console.error(`Skipping row due to missing required field cow_id:`, data);
+        //   return; // Skip this row
+        // }
 
         // Reformat and convert date
         if (data.date) {
@@ -38,6 +59,7 @@ router.post("/", upload.single('file'), (req, res) => {
             return; // Skip this row if date is invalid
           }
         }
+
         results.push(data);
       })
       .on('end', async () => {

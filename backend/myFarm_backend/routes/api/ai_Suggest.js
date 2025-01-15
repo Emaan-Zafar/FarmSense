@@ -91,13 +91,13 @@ router.get('/generate-suggestions/:cowId', async (req, res) => {
   
 module.exports = router;*/
 
-/*const express = require("express");
+const express = require("express");
 const axios = require("axios");
 require('dotenv').config();
 
 let router = express.Router();
 
-const OPENAI_API_KEY =  process.env.OPENAI_API_KEY;
+const OPENAI_API_KEY =  "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";
 
 router.post("/cowChat", async (req, res) => {
   const { message } = req.body;
@@ -110,7 +110,7 @@ router.post("/cowChat", async (req, res) => {
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
         // gpt-4o-mini
         messages: [
           {
@@ -147,47 +147,48 @@ router.post("/cowChat", async (req, res) => {
   }
 });
 
-module.exports = router;*/
-const express = require("express");
-const axios = require("axios");
-require("dotenv").config();
-
-const router = express.Router();
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-router.post("/cowChat", async (req, res) => {
-  const { message } = req.body;
-
-  if (!message) {
-    return res.status(400).json({ error: "Message is required." });
-  }
-
-  try {
-    const response = await axios.post(
-      "https://maizazureopenai.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview",
-      {
-        model: "gpt-4o",
-        messages: [
-          { role: "system", content: "You are a helpful assistant specialized in cow health, behavior, and farm management. Only provide responses related to cows. Provide responses in short, clear points. Keep it concise and actionable." },
-          { role: "user", content: message }
-        ]
-      },
-      {
-        headers: {
-          "api-key": OPENAI_API_KEY,
-          "Content-Type": "application/json"
-        }
-      }
-    );
-
-    res.status(200).json({ suggestions: response.data.choices[0].message.content });
-  } catch (error) {
-    console.error("Error with OpenAI API:", error.response?.data || error.message);
-    res.status(500).json({ error: "Failed to fetch suggestions from ChatGPT. Try again later.", details: error.response?.data || error.message });
-  }
-});
-
 module.exports = router;
+
+// const express = require("express");
+// const axios = require("axios");
+// require("dotenv").config();
+
+// const router = express.Router();
+// const OPENAI_API_KEY = "BG0Gv0gBczV6C3ALAksdqQKG0lpP6JOZ8ZGROZUeCZyrjd7X2jmgJQQJ99BAACYeBjFXJ3w3AAABACOG6z5U";
+
+// router.post("/cowChat", async (req, res) => {
+//   const { message } = req.body;
+
+//   if (!message) {
+//     return res.status(400).json({ error: "Message is required." });
+//   }
+
+//   try {
+//     const response = await axios.post(
+//       "https://maizazureopenai.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview",
+//       {
+//         model: "gpt-4o",
+//         messages: [
+//           { role: "system", content: "You are a helpful assistant specialized in cow health, behavior, and farm management. Only provide responses related to cows. Provide responses in short, clear points. Keep it concise and actionable." },
+//           { role: "user", content: message }
+//         ]
+//       },
+//       {
+//         headers: {
+//           "api-key": OPENAI_API_KEY,
+//           "Content-Type": "application/json"
+//         }
+//       }
+//     );
+
+//     res.status(200).json({ suggestions: response.data.choices[0].message.content });
+//   } catch (error) {
+//     console.error("Error with OpenAI API:", error.response?.data || error.message);
+//     res.status(500).json({ error: "Failed to fetch suggestions from ChatGPT. Try again later.", details: error.response?.data || error.message });
+//   }
+// });
+
+// module.exports = router;
 
 
 /*const express = require("express");
