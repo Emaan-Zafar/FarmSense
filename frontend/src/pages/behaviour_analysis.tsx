@@ -94,12 +94,27 @@ export default function Page() {
             '& .MuiOutlinedInput-root': {
               borderColor: 'white',
               color: 'white',
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffffff', // Bright white for hover
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ffffff', // Bright white for focused state
+              },
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'rgba(255, 255, 255, 0.7)', // Slightly translucent white
             },
             '& .MuiInputLabel-root': {
               color: 'white',
+              '&.Mui-focused': {
+                color: 'white',
+              },
             },
             '& .MuiSelect-select': {
               color: 'white',
+            },
+            '& .MuiFormLabel-root.MuiInputLabel-shrink': {
+              transform: 'translate(14px, -14px) scale(0.75)', // Adjust label position
             },
           }}
         >

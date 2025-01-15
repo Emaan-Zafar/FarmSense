@@ -205,44 +205,64 @@ export default function CowDetailsPage() {
 
           {/* Feed Consumption Chart */}
           <Grid item xs={12} md={6}>
-            <Card
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(8px)',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-                borderRadius: '16px',
-                padding: 3,
-              }}
-            >
-               {status === 'Healthy' ? (
-            <Typography variant="h6" color="white">
-              No disease detected. The cattle is healthy.
-            </Typography>
-          ) : diseaseDetails ? (
-            <>
-              <Typography variant="h6" color="red">
-                Disease Detected: {diseaseDetails.disease}
-              </Typography>
-              <Typography variant="body1">
-                Symptoms Detected:
-                <ul>
-                  {diseaseDetails.symptoms.map((symptom, index) => (
-                    <li key={index}>{symptom}</li>
-                  ))}
-                </ul>
-              </Typography>
-            </>
-          ) : (
-            <Typography variant="h6" color="orange">
-              Fetching disease details...
-            </Typography>
-          )}
-              {/* <AnalyticsWebsiteVisits
-                title="Disease Prediction"
-                chart={chartData}
-                tooltipLabel="chance"
-              /> */}
-            </Card>
+          <Card
+  sx={{
+    background: status === 'Healthy' ? 'linear-gradient(to right, #43cea2, #185a9d)' : 'linear-gradient(to right, #ff7e5f, #feb47b)',
+    color: 'white',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+    borderRadius: '16px',
+    padding: 3,
+    position: 'relative',
+    overflow: 'hidden',
+  }}
+>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      background: status === 'Healthy' ? 'rgba(67, 206, 162, 0.2)' : 'rgba(255, 126, 95, 0.2)',
+      zIndex: -1,
+      borderRadius: 'inherit',
+    }}
+  />
+  <Typography variant="h5" fontWeight="bold" gutterBottom>
+    {status === 'Healthy' ? '🎉 Good News! Your Cow is Healthy.' : '⚠️ Disease Detected!'}
+  </Typography>
+  {status === 'Healthy' ? (
+    <Typography variant="body1">
+      No disease detected. Keep monitoring the cow for any changes in behavior.
+    </Typography>
+  ) : diseaseDetails ? (
+    <>
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
+        {diseaseDetails.disease}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <strong>Symptoms Detected:</strong>
+        <ul>
+          {diseaseDetails.symptoms.map((symptom, index) => (
+            <li key={index} style={{ fontSize: '1rem', lineHeight: '1.5' }}>
+              {symptom}
+            </li>
+          ))}
+        </ul>
+      </Typography>
+      <Box mt={2}>
+        <Typography variant="body2" color="white" gutterBottom>
+        It&apos;s recommended to consult a veterinarian for further assistance.
+        </Typography>
+      </Box>
+    </>
+  ) : (
+    <Typography variant="h6" color="yellow">
+      Fetching disease details...
+    </Typography>
+  )}
+</Card>
+
           </Grid>
         </Grid>
       </DashboardLayout>

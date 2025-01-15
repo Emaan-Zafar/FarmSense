@@ -21,7 +21,7 @@ export const navData = [
   {
     title: 'Video Gallery',
     path: '/dashboard/video_gallery',
-    icon: icon('ic-behaviour'),
+    icon: icon('ic-gallery'),
   },
   {
     title: 'Behaviour Analysis',

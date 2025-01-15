@@ -109,7 +109,7 @@ export default function Page() {
         </Box>
 
         <Card sx={{
-          backgroundColor: '#7b8687', // Semi-transparent background
+          backgroundColor: '#B0C3C9', // Semi-transparent background
           backdropFilter: 'blur(8px)', // Apply blur effect
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Add shadow
           borderRadius: '16px', // Optional: rounded corners
@@ -126,7 +126,7 @@ export default function Page() {
 
           <Scrollbar>
             <TableContainer sx={{ overflow: 'unset' }}>
-              <Table sx={{ minWidth: 800}}>
+              <Table sx={{ minWidth: 800, backgroundColor: '#B0C3C9'}}>
                 <UserTableHead
                   order={table.order}
                   orderBy={table.orderBy}
