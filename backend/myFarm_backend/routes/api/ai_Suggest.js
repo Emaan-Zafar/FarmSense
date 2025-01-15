@@ -97,7 +97,8 @@ require('dotenv').config();
 
 let router = express.Router();
 
-// const OPENAI_API_KEY =  "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";
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 router.post("/cowChat", async (req, res) => {
   const { message } = req.body;
